@@ -1,0 +1,18 @@
+{
+  "name": "legal-for-cn-jp",
+  "owner": {
+    "name": "ChenxingM"
+  },
+  "description": "Japan + China bilingual law assistant for the animation industry",
+  "version": "0.2.1",
+  "plugins": [
+    {
+      "name": "legal-for-cn-jp",
+      "source": "./",
+      "description": "Japan + China bilingual law assistant for the animation industry. JP side: 16 core statutes + 下請法系 4 rules + e-Gov API. CN side: 21 core statutes auto-refreshed weekly from LawRefBook/Laws via GitHub Actions (works behind cn-blocked corporate networks). Not a substitute for a licensed attorney.",
+      "version": "0.2.1",
+      "category": "legal",
+      "keywords": ["japanese-law", "chinese-law", "prc-law", "copyright", "anime", "animation", "labor-law", "oss-license", "e-gov", "github-actions"]
+    }
+  ]
+}
