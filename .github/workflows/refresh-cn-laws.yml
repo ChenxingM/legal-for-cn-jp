@@ -39,11 +39,13 @@ jobs:
       - name: Detect changes
         id: changes
         run: |
-          if git diff --quiet references/cn_laws/; then
+          # `git status --porcelain` catches both modified tracked files AND new untracked files.
+          # `git diff --quiet` would miss new files (e.g., the first sync of a newly-added law).
+          if [ -z "$(git status --porcelain references/cn_laws/)" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
-            git diff --name-only references/cn_laws/ | head -20
+            git status --porcelain references/cn_laws/ | head -30
           fi
 
       - name: Create pull request

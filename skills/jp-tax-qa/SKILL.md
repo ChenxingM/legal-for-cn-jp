@@ -1,6 +1,6 @@
 ---
 name: jp-tax-qa
-description: Answer Japanese tax law questions for the animation / visual content industry — 所得税法, 法人税法, 消費税法 (含 インボイス制度), 相続税法, 国税通則法, 国税徴収法, 印紙税法, 租税特別措置法, 関税法, 地方税法. **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 question → 中文 answer, 日本語 question → 日本語 answer, English → English; 法令名 and quoted articles stay in original Japanese, but ALL commentary follows the user's language. (2) ALWAYS fetch the relevant JP tax statute via `egov_client.py fetch <法令ID>` (Bash tool) before answering — JP tax law is NOT bundled, must hit e-Gov API. (3) ASK USER FOR CONTEXT before answering if the question depends on 個人事業主 vs 法人, 資本金, 居住者/非居住者, 源泉徴収義務, 課税事業者/免税事業者 status, etc. — do not pick a path silently. (4) QUOTE the article verbatim from the API response. (5) NEVER reference user's name/employer/role.** Use when the user asks about 源泉徴収, インボイス制度, 適格請求書発行事業者, 消費税の課税事業者, フリーランスの所得税, 法人税の優遇, アニメ製作費の損金算入, 印紙税の額, 国税通則法の更正/賦課/不服申立, 租税特別措置法のクリエイティブ税制, or any 日本税法 question.
+description: Answer Japanese tax law questions for the animation / visual content industry — 所得税法, 法人税法, 消費税法 (含 インボイス制度), 相続税法, 国税通則法, 国税徴収法, 印紙税法, 租税特別措置法, 関税法, 地方税法. **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 question → 中文 answer, 日本語 question → 日本語 answer, English → English; 法令名 and quoted articles stay in original Japanese, but ALL commentary follows the user's language. (2) 10 主要 JP tax laws are LOCALLY BUNDLED in `~~/references/laws/` — READ them directly. Three are very large (所得税法 ~22 MB, 租税特別措置法 ~19 MB, 地方税法 ~16 MB) and need Grep-then-Read-with-offset rather than full Read. For unbundled laws / 通達 / 告示 fall back to `egov_client.py fetch`. Do not paraphrase from training data. (3) ASK USER FOR CONTEXT before answering if the question depends on 個人事業主 vs 法人, 資本金, 居住者/非居住者, 源泉徴収義務, 課税事業者/免税事業者 status, etc. — do not pick a path silently. (4) QUOTE the article verbatim from the bundled file. (5) NEVER reference user's name/employer/role.** Use when the user asks about 源泉徴収, インボイス制度, 適格請求書発行事業者, 消費税の課税事業者, フリーランスの所得税, 法人税の優遇, アニメ製作費の損金算入, 印紙税の額, 国税通則法の更正/賦課/不服申立, 租税特別措置法のクリエイティブ税制, or any 日本税法 question.
 
 ---
 
@@ -12,11 +12,11 @@ description: Answer Japanese tax law questions for the animation / visual conten
 
 > **MANDATORY STEPS — DO NOT SKIP.**
 >
-> 1. **FETCH via egov_client.py before answering** — JP tax law is NOT bundled. Use Bash tool:
->    ```bash
->    python3 ~~/skills/jp-law-lookup/scripts/egov_client.py fetch <法令ID>
->    ```
->    Pick the right 法令ID from the table below. Do not paraphrase from training data — tax law changes annually and yours is stale.
+> 1. **PREFER local Read on bundled files** — 10 主要 JP tax laws are bundled in `~~/references/laws/`:
+>    - Small/medium (< 5 MB; Read directly): 法人税法.md, 消費税法.md, 相続税法.md, 国税通則法.md, 国税徴収法.md, 印紙税法.md, 関税法.md
+>    - **Large (use Grep + Read with offset, NOT a full Read)**: 所得税法.md (~22 MB), 租税特別措置法.md (~19 MB), 地方税法.md (~16 MB). Strategy: `Grep` for `第X条` to find the line number, then `Read` with `offset` and `limit=200` to pull just the relevant article.
+>    - For unbundled JP laws / 通達 / 告示: `python3 ~~/skills/jp-law-lookup/scripts/egov_client.py fetch <法令ID>` (Bash tool).
+>    Do not paraphrase from training data — JP tax law changes annually (年末税制改正大綱 → 翌年4月施行).
 >
 > 2. **ASK FOR MISSING USER CONTEXT** before drafting any concrete answer. If any of these are not specified and would change the answer, ask:
 >    - 個人事業主 / 法人 / 給与所得者 (which side of 所得税法 / 法人税法)
@@ -58,20 +58,27 @@ description: Answer Japanese tax law questions for the animation / visual conten
 このため、〇〇の場合、源泉徴収義務は…
 ```
 
-## JP tax statutes — 法令ID and authoritative URLs
+## Bundled JP tax statutes (`~~/references/laws/`)
 
-| Statute | 法令ID | e-Gov URL | Use for |
-|---|---|---|---|
-| 所得税法 | [340AC0000000033](https://laws.e-gov.go.jp/law/340AC0000000033) | same | 個人所得税、源泉徴収、フリーランス、給与、退職金 |
-| 法人税法 | [340AC0000000034](https://laws.e-gov.go.jp/law/340AC0000000034) | same | 法人税、損金算入、欠損金、グループ通算 |
-| 消費税法 | [363AC0000000108](https://laws.e-gov.go.jp/law/363AC0000000108) | same | 消費税、課税対象、課税事業者、輸出免税、インボイス制度 |
-| 相続税法 | [325AC0000000073](https://laws.e-gov.go.jp/law/325AC0000000073) | same | 相続税、贈与税 |
-| 国税通則法 | [337AC0000000066](https://laws.e-gov.go.jp/law/337AC0000000066) | same | 国税の更正/決定、不服申立、附帯税、徴収の優先順位 |
-| 国税徴収法 | [334AC0000000147](https://laws.e-gov.go.jp/law/334AC0000000147) | same | 国税の滞納処分、差押、交付要求 |
-| 印紙税法 | [342AC0000000023](https://laws.e-gov.go.jp/law/342AC0000000023) | same | 契約書、領収書の印紙 |
-| 租税特別措置法 | [332AC0000000026](https://laws.e-gov.go.jp/law/332AC0000000026) | same | 各種税制優遇（中小特例、研究開発、コンテンツ製作） |
-| 関税法 | [329AC0000000061](https://laws.e-gov.go.jp/law/329AC0000000061) | same | 関税、輸入消費税、税関手続 |
-| 地方税法 | [325AC0000000226](https://laws.e-gov.go.jp/law/325AC0000000226) | same | 住民税、事業税、固定資産税、地方消費税 |
+| File | 法令ID | e-Gov URL | Size | Use for |
+|---|---|---|---|---|
+| `所得税法.md` | [340AC0000000033](https://laws.e-gov.go.jp/law/340AC0000000033) | same | ~22 MB ⚠️ | 個人所得税、源泉徴収、フリーランス、給与、退職金 |
+| `法人税法.md` | [340AC0000000034](https://laws.e-gov.go.jp/law/340AC0000000034) | same | ~4 MB | 法人税、損金算入、欠損金、グループ通算 |
+| `消費税法.md` | [363AC0000000108](https://laws.e-gov.go.jp/law/363AC0000000108) | same | ~1.7 MB | 消費税、課税対象、課税事業者、輸出免税、インボイス制度 |
+| `相続税法.md` | [325AC0000000073](https://laws.e-gov.go.jp/law/325AC0000000073) | same | ~1.1 MB | 相続税、贈与税 |
+| `国税通則法.md` | [337AC0000000066](https://laws.e-gov.go.jp/law/337AC0000000066) | same | ~1.2 MB | 国税の更正/決定、不服申立、附帯税 |
+| `国税徴収法.md` | [334AC0000000147](https://laws.e-gov.go.jp/law/334AC0000000147) | same | ~780 KB | 滞納処分、差押、交付要求 |
+| `印紙税法.md` | [342AC0000000023](https://laws.e-gov.go.jp/law/342AC0000000023) | same | ~750 KB | 契約書、領収書の印紙 |
+| `租税特別措置法.md` | [332AC0000000026](https://laws.e-gov.go.jp/law/332AC0000000026) | same | ~19 MB ⚠️ | 各種税制優遇（中小特例、研究開発、コンテンツ製作） |
+| `関税法.md` | [329AC0000000061](https://laws.e-gov.go.jp/law/329AC0000000061) | same | ~1.6 MB | 関税、輸入消費税、税関手続 |
+| `地方税法.md` | [325AC0000000226](https://laws.e-gov.go.jp/law/325AC0000000226) | same | ~16 MB ⚠️ | 住民税、事業税、固定資産税、地方消費税 |
+
+**⚠️ For the three large laws, do NOT call `Read` without `offset`/`limit`** — it will dump 10-20k lines into context. Pattern:
+1. `Grep` the file for `第X条` or relevant keyword to get the line number.
+2. `Read` with `offset=<line>` and `limit=200` to pull just the relevant article and its neighbors.
+3. Quote that article verbatim.
+
+To refresh after a 税制改正: re-run `python3 ~~/tooling/jp-tax-fetch/fetch.py`. The script overwrites the 10 bundled files from e-Gov.
 
 For **国税庁通達 / 告示 / FAQ** (not in e-Gov):
 - 国税庁 法令解釈通達: https://www.nta.go.jp/law/tsutatsu/
