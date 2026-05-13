@@ -23,10 +23,14 @@ Deferred from original v0.2.0 plan:
 - 下請代金支払遅延等防止法 (Japan's Subcontract Act) — still not in e-Gov bulk feed; v0.2.1
 - Long-tail PRC law lookup beyond the bundled 21 — the v0.2.0 build originally shipped a HuggingFace index for this, which has been removed. Direct scraping of flk.npc.gov.cn (the originally planned replacement) was abandoned after their 2026 SPA migration broke the unofficial JSON API. Current plan: extend `LRB_SOURCED_LAWS` in `scraper.py` to cover more 法律部门 / 行政法规 / 司法解释 from LawRefBook in v0.3.0.
 
-## v0.2.1 — pending refinements
+## v0.2.1 — shipped (incremental refinements)
+
+- **下請代金支払遅延等防止法 (下請法) + 4 implementing rules** fetched from 公正取引委員会 (jftc.go.jp) and bundled in `references/laws/`. Includes 主法 (12 articles + 附則), 施行令 (cabinet order on 情報成果物/役務 definitions and electronic consent), 書面規則 (8 mandatory written-contract items under 第3条), 遅延利息規則 (14.6%/year rate under 第4条の2), and 書類保存規則 (12 record-items + 2-year retention under 第5条). Reflects amendments through 平成21年法律第51号 (act) and 令和5年公正取引委員会規則第3号 (書面規則).
+- **`jp-subcontract-review` skill** — new dedicated audit skill for 下請法 compliance: 親-下請事業者 capital-threshold decision tree, the 8 mandatory items, 60-day payment ceiling, 11 prohibited 親事業者 acts, late-interest computation, records retention, anime-industry mappings, house-style audit output. Distinct from `jp-labor-contract-review` (which handles worker-classification / 偽装請負).
+
+Still deferred to later (v0.2.2 or v0.3.0):
 
 - `cn-labor-contract-review` as standalone skill (currently the JP-side skill does double duty for Chinese contracts)
-- 下請法 fetched manually from 公正取引委員会 and bundled
 - 部门规章 bundle for the most cited rules in anime work:
   - 《生成式人工智能服务管理暂行办法》(国家网信办, 2023)
   - 《互联网信息服务深度合成管理规定》(国家网信办, 2023)

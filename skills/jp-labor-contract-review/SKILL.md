@@ -54,7 +54,7 @@ Run through this checklist and surface every hit:
 
 - Vague scope of work — common in 原画外注 but creates 偽装請負 exposure
 - IP assignment without explicit 著作権法 第27条 (翻案権) and 第28条 (二次的著作物の利用) language — these don't transfer by default
-- Payment terms over 60 days (note: 下請法 may apply if both sides are 事業者 of certain sizes)
+- Payment terms over 60 days (note: 下請法 may apply if both sides are 事業者 of certain sizes → escalate to `jp-subcontract-review` for the full B2B audit)
 - Confidentiality with no time limit on post-termination
 - Audit / inspection rights that are one-way only
 - Mandatory exclusivity without compensation
