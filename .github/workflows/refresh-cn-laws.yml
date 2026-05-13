@@ -1,12 +1,10 @@
-# Save this file at .github/workflows/refresh-cn-laws.yml in your fork of the plugin.
-# It will run weekly on Monday 03:00 UTC (12:00 JST), pull the latest core PRC
-# statutes from flk.npc.gov.cn, and open a PR (or commit directly to a branch)
-# with any changes.
+# Weekly sync of LRB-sourced PRC core statutes from github.com/LawRefBook/Laws.
+# Runs Monday 03:00 UTC (12:00 JST). Opens a PR if anything changed.
 #
-# Why: corporate networks often block .cn domains. GitHub-hosted runners are
-# in the US/EU and can reach flk.npc.gov.cn normally. Output is committed to
-# this repo and pulled into the plugin via `git pull`, no .cn access needed
-# on the user's side.
+# Why: flk.npc.gov.cn rebuilt as a SPA in 2026, breaking the unofficial JSON
+# API we previously scraped. LawRefBook handles that upstream complexity for us;
+# we just `git clone` their corpus and cherry-pick the laws we want. Corporate
+# networks that block .cn domains never need to be touched.
 
 name: Refresh PRC core statutes
 
@@ -52,19 +50,21 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: 'chore(cn-laws): refresh from flk.npc.gov.cn'
-          title: 'Weekly refresh: PRC core statutes'
+          commit-message: 'chore(cn-laws): sync from LawRefBook/Laws'
+          title: 'Weekly sync: PRC core statutes (LawRefBook)'
           body: |
-            Automated weekly refresh of the bundled PRC core statutes.
+            Automated weekly sync of the LRB-sourced PRC core statutes.
 
-            Source: flk.npc.gov.cn (国家法律法规数据库)
-            Scraper: tooling/cn-law-refresh/scraper.py
-            Triggered: ${{ github.event_name }}
+            Upstream: github.com/LawRefBook/Laws (community-maintained corpus)
+            Scraper:  tooling/cn-law-refresh/scraper.py
+            Trigger:  ${{ github.event_name }}
+
+            Owner-maintained laws (民法典 / 反不正当竞争法 / 网络安全法 / 仲裁法) are not in this diff — see `OWNER_MAINTAINED_LAWS` in scraper.py.
 
             **Review checklist:**
             - [ ] Spot-check 2-3 changed files for format integrity
+            - [ ] If any LRB-sourced law shows regression vs a known recent amendment, move it into `OWNER_MAINTAINED_LAWS` and refresh from .docx instead
             - [ ] Bump plugin version if any major rewrite landed
-            - [ ] Repackage `.plugin` and publish a release if releasing
           branch: refresh-cn-laws/${{ github.run_number }}
           base: main
           delete-branch: true
