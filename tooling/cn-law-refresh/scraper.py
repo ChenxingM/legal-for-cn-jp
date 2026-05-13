@@ -54,6 +54,7 @@ SEARCH_DIRS = [
 
 # Laws synced from LawRefBook on every run.
 LRB_SOURCED_LAWS = [
+    # Civil / commercial / labor / IP / procedure
     "著作权法",
     "商标法",
     "专利法",
@@ -71,6 +72,22 @@ LRB_SOURCED_LAWS = [
     "公司法",
     "外商投资法",
     "民事诉讼法",
+    # Tax (v0.3.0 — for jp-cn-tax skills)
+    "个人所得税法",
+    "企业所得税法",
+    "增值税法",
+    "印花税法",
+    "关税法",
+    "税收征收管理法",
+    "资源税法",
+    "城市维护建设税法",
+    "契税法",
+    "环境保护税法",
+    "耕地占用税法",
+    "烟叶税法",
+    "船舶吨税法",
+    "车船税法",
+    "车辆购置税法",
 ]
 
 # Laws maintained by the project owner. The scraper does NOT touch these files.

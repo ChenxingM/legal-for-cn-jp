@@ -1,7 +1,7 @@
 {
   "name": "legal-for-cn-jp",
-  "version": "0.2.1",
-  "description": "Japan + China bilingual law assistant for the animation industry. JP side: 16 core statutes + e-Gov API. CN side: 21 core statutes auto-refreshed weekly from flk.npc.gov.cn via GitHub Actions (works behind cn-blocked corporate networks). Not a substitute for a licensed attorney.",
+  "version": "0.3.0",
+  "description": "Japan + China bilingual law assistant for the animation industry (incl. tax law). JP side: 16 core statutes + 下請法系 4 rules + e-Gov API (incl. 10 JP tax laws fetched dynamically). CN side: 21 core statutes + 15 tax laws auto-refreshed weekly from LawRefBook/Laws via GitHub Actions (works behind cn-blocked corporate networks). Not a substitute for a licensed attorney.",
   "author": {
     "name": "legal-for-cn-jp contributors"
   },

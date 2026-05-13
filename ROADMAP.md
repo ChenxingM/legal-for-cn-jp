@@ -29,6 +29,20 @@ Deferred from original v0.2.0 plan:
 - **下請代金支払遅延等防止法 (下請法) + 4 implementing rules** fetched from 公正取引委員会 (jftc.go.jp) and bundled in `references/laws/`. Includes 主法 (12 articles + 附則), 施行令 (cabinet order on 情報成果物/役務 definitions and electronic consent), 書面規則 (8 mandatory written-contract items under 第3条), 遅延利息規則 (14.6%/year rate under 第4条の2), and 書類保存規則 (12 record-items + 2-year retention under 第5条). Reflects amendments through 平成21年法律第51号 (act) and 令和5年公正取引委員会規則第3号 (書面規則).
 - **`jp-subcontract-review` skill** — new dedicated audit skill for 下請法 compliance: 親-下請事業者 capital-threshold decision tree, the 8 mandatory items, 60-day payment ceiling, 11 prohibited 親事業者 acts, late-interest computation, records retention, anime-industry mappings, house-style audit output. Distinct from `jp-labor-contract-review` (which handles worker-classification / 偽装請負).
 
+## v0.3.0 — shipped (tax law)
+
+- **JP tax law via e-Gov API** — 10 statutes accessible via `egov_client.py fetch <法令ID>`: 所得税法 (340AC0000000033), 法人税法 (340AC0000000034), 消費税法 (363AC0000000108), 相続税法 (325AC0000000073), 国税通則法 (337AC0000000066), 国税徴収法 (334AC0000000147), 印紙税法 (342AC0000000023), 租税特別措置法 (332AC0000000026), 関税法 (329AC0000000061), 地方税法 (325AC0000000226). Not bundled locally — fetched dynamically because each is large and e-Gov is always current.
+- **CN tax law via LawRefBook sync** — 15 statutes added to `LRB_SOURCED_LAWS` and synced weekly: 个人所得税法, 企业所得税法, 增值税法 (2024-12-25 新法), 印花税法, 关税法, 税收征收管理法, 资源税法, 城市维护建设税法, 契税法, 环境保护税法, 耕地占用税法, 烟叶税法, 船舶吨税法, 车船税法, 车辆购置税法.
+- **3 new skills**:
+  - `jp-tax-qa` — Japanese tax Q&A, fetches statute dynamically via egov_client.py, asks user for context (個人/法人, 課税事業者 status, 居住者 etc.) before answering.
+  - `cn-tax-qa` — Chinese tax Q&A, reads bundled CN tax laws, asks user for context (居民/非居民, 一般/小规模, 工资薪金/劳务报酬/稿酬 etc.) before answering.
+  - `cross-border-tax` — JP-CN cross-border tax: 中日租税条約 (1983 / 議定書), 源泉徴収 vs 预提所得税, 移転価格, ライセンス料 / 配信権 / 出演料 cross-border taxation, PE 認定. Always cites both sides + treaty article.
+
+Deferred to v0.3.1 / v0.4.0:
+- JP 国税庁通達 / 告示 (基本通達, インボイス制度公告等) — animation-industry tax answers often live here.
+- CN 财政部 / 国家税务总局 公告 / 实施条例 (个人所得税法实施条例、企业所得税法实施条例、各种行业优惠公告) — same reason.
+- 中日租税条約 全文 bundling.
+
 Still deferred to later (v0.2.2 or v0.3.0):
 
 - `cn-labor-contract-review` as standalone skill (currently the JP-side skill does double duty for Chinese contracts)
