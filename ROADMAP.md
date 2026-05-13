@@ -12,15 +12,16 @@ The vision is a Japan-China bilingual legal assistant for the animation industry
 ## v0.2.0 — shipped (Chinese statutory law)
 
 - 21 core PRC statutes bundled from user's 2026-05 docx batch download
-- 22,552-law HuggingFace index covering 法律 / 宪法 / 行政法规 / 司法解释 / 地方性法规 / 监察法规
-- `cn-law-lookup` skill with HuggingFace fetch client (no .cn dependency at runtime)
+- `cn-law-lookup` skill against the bundled 21 (no .cn dependency at runtime)
 - `cn-copyright-qa` skill with cross-references to Japan-side concepts
 - `refresh_cn_corpus.py` for local corpus updates without plugin reinstall
-- Total plugin size doubled from ~5 MB to ~10 MB
+- GitHub Actions workflow `.github/workflows/refresh-cn-laws.yml` — weekly auto-refresh of the 21 core statutes from flk.npc.gov.cn (GH-hosted runners are in US/EU, so even maintainers behind .cn-blocking corporate networks stay current)
+- Total plugin size ~6 MB
 
 Deferred from original v0.2.0 plan:
 - `cn-labor-contract-review` skill — folded into the JP version's logic; can be split out in v0.2.1 if user demand justifies it
 - 下請代金支払遅延等防止法 (Japan's Subcontract Act) — still not in e-Gov bulk feed; v0.2.1
+- Long-tail PRC law lookup beyond the bundled 21 — the v0.2.0 build originally shipped a HuggingFace index for this, which has been removed. Replacement design: GitHub Actions periodically caches a curated extended set from flk.npc.gov.cn into the repo. To be specified by the maintainer in a .cn-accessible environment; tracked for v0.2.1 or v0.3.0.
 
 ## v0.2.1 — pending refinements
 

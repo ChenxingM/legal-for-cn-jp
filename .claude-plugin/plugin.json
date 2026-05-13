@@ -1,7 +1,7 @@
 {
   "name": "legal-for-cn-jp",
   "version": "0.2.0",
-  "description": "Japan + China bilingual law assistant for the animation industry. JP side: 16 core statutes + e-Gov API. CN side: 21 core statutes + 22552-law HuggingFace index (works behind cn-blocked corporate networks). Not a substitute for a licensed attorney.",
+  "description": "Japan + China bilingual law assistant for the animation industry. JP side: 16 core statutes + e-Gov API. CN side: 21 core statutes auto-refreshed weekly from flk.npc.gov.cn via GitHub Actions (works behind cn-blocked corporate networks). Not a substitute for a licensed attorney.",
   "author": {
     "name": "legal-for-cn-jp contributors"
   },
@@ -15,7 +15,7 @@
     "labor-law",
     "oss-license",
     "e-gov",
-    "huggingface"
+    "github-actions"
   ],
   "license": "MIT"
 }

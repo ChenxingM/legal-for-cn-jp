@@ -9,34 +9,9 @@ Answer questions about Chinese statutory law by retrieving the actual text — n
 
 ## Decision tree
 
-1. **Is the law one of the 21 bundled core statutes?** Check `~~/references/cn_laws/`. If yes, read it directly — fastest path, zero network, latest manually-curated text.
-2. **Is the law not in the bundled set?** Use the HuggingFace fetch client at `scripts/hf_client.py` — works against the bundled 22,552-entry index that covers 法律 / 宪法 / 行政法规 / 司法解释 / 地方性法规 / 监察法规 from the 国家法律法规数据库 as of 2023-09.
-3. **Important — flk.npc.gov.cn is NOT used at runtime.** Many corporate networks block .cn domains. This plugin deliberately routes all PRC law fetches through HuggingFace's HTTPS endpoints, which are not blocked in typical corporate environments.
-
-## HuggingFace fetch client
-
-For any PRC law outside the 21 bundled core statutes, use `scripts/hf_client.py`. Run via Bash:
-
-```bash
-# Search the bundled 22552-entry index by title fragment (offline, no network)
-python3 ~~/skills/cn-law-lookup/scripts/hf_client.py search "信息网络传播权" --limit 5
-
-# Filter by type
-python3 ~~/skills/cn-law-lookup/scripts/hf_client.py search "著作权" --law-type "司法解释"
-
-# Filter by issuing body
-python3 ~~/skills/cn-law-lookup/scripts/hf_client.py search "数据" --office-level "国务院"
-
-# Fetch by dataset offset (from search results)
-python3 ~~/skills/cn-law-lookup/scripts/hf_client.py fetch 934
-
-# One-shot: search by title and fetch the top match
-python3 ~~/skills/cn-law-lookup/scripts/hf_client.py fetch-title "信息网络传播权保护条例"
-```
-
-`fetch-title` ranks matches as 法律 > 宪法 > 行政法规 > 司法解释 > others, then by most-recent publish date. It always returns the full text plus the top 4 other matches as `other_matches` so you can offer alternatives.
-
-The dataset is `twang2218/chinese-law-and-regulations` — pandoc-converted Markdown of the 国家法律法规数据库, snapshot 2023-09. **For amendments after Sept 2023** (e.g., 公司法 2023-12 修正, 反不正当竞争法 2025-06, 网络安全法 2025-10), the bundled 21 core statutes have been manually refreshed and supersede the HuggingFace text — check `~~/references/cn_laws/` first.
+1. **Is the law one of the 21 bundled core statutes?** Check `~~/references/cn_laws/`. If yes, read it directly — fastest path, zero network, latest curated text.
+2. **Not in the bundled set?** This version cannot fetch the long tail at runtime. Tell the user the law is outside the bundled corpus, offer to reason from general principles only, and **always** flag the text-unavailable caveat. The roadmap is to cache a curated long-tail subset from flk.npc.gov.cn weekly via GitHub Actions (runners are US/EU and can reach .cn even when the user's corporate network cannot), but the design is not yet in place.
+3. **flk.npc.gov.cn is NOT reached from the user's machine at runtime.** Many corporate networks block .cn domains. The 21 core statutes are refreshed on GitHub-hosted runners and committed to the repo, so end users never need to hit .cn themselves.
 
 ## Bundled core statutes
 
@@ -74,7 +49,7 @@ These 21 laws live in `references/cn_laws/` as cleaned Markdown — top tier (�
 | 二次创作、同人作品 | 著作权法 第10条(权利) + 第24条(合理使用 — narrow!) — PRC 合理使用比 Japan/US 都窄 |
 | 改编权 | 著作权法 第10条第14项 |
 | 信息网络传播权 (online distribution) | 著作权法 第10条第12项 |
-| 制作公司与角色作者的归属 | 著作权法 第18条 (职务作品) — 注意中国职务作品规则与日本职務著作不同 |
+| 制作公司与角色作者的归属 | 著作权法 第18条 (职务作品) — 注意中国职务作品规则与日本職務著作不同 |
 | 影视作品著作权归属 | 著作权法 第17条 (制片人享有著作权，原作者保留署名权和获得报酬权) |
 | 跨境授权合同 | 民法典 合同编 第464条以下 + 涉外民事关系法律适用法 |
 | 委外加工合同 (外注) | 民法典 承揽合同 第770条以下 |
@@ -98,34 +73,21 @@ These 21 laws live in `references/cn_laws/` as cleaned Markdown — top tier (�
 
 ## What this skill cannot do
 
-- **No 部门规章 (部委级规章)**. The HuggingFace dataset covers laws issued by 全国人大, 国务院, 最高法, 最高检 — but not most 部门规章 (e.g., 网信办《生成式人工智能服务管理暂行办法》, 国家版权局规章). For these, the user needs to fetch from the issuing 部委 website manually. v0.5.0 will bundle the most important ones for animation work.
+- **Long-tail laws (anything outside the 21 bundled core statutes) cannot be served at runtime in this version.** Future plan: a weekly GitHub Actions job will pull a curated extended set from flk.npc.gov.cn and commit it to the repo, so end users never need .cn access. Until that lands, only the 21 bundled core statutes are queryable; for anything else, reason from general principles and disclose the gap.
+- **No 部门规章 (部委级规章)**. Most 部门规章 (e.g., 网信办《生成式人工智能服务管理暂行办法》, 国家版权局规章) are not in the core 21. For these the user needs to fetch from the issuing 部委 website manually. v0.5.0 will bundle the most important ones for animation work.
 - **No 判例 (cases)**. PRC case-law search is v0.4.0.
-- **Dataset is 2023-09 snapshot**. For amendments after that date, prefer the manually-refreshed 21 core statutes in `references/cn_laws/`. The bundled index does mark `status` (有效 / 已修改 / 已废止) but this status reflects the 2023-09 state, not current state, for older amendments.
 - **No 港澳台 special-region laws** in the bundled set (these are governed by separate frameworks).
 
 ## Freshness — read every time before quoting
 
-Two-tier freshness:
+Single tier: the 21 bundled core statutes in `references/cn_laws/`, currently as of 2026-05.
 
-- **`references/cn_laws/` (21 core statutes)**: manually curated, currently as of 2026-05. Refreshed when the user runs `scripts/refresh_cn_corpus.py` on a directory of newer docx downloads from 国家法律法规数据库.
-- **HuggingFace dataset (via `hf_client.py`)**: snapshot dated 2023-09. Anything amended after 2023-09 (公司法 2023-12 修正, 反不正当竞争法 2025-06 修正, 网络安全法 2025-10 修正, 仲裁法 2025-09 修正, 民事诉讼法 2023-09 修正) is **stale** in the HF data.
+Refresh paths:
 
-**When you pull from HuggingFace, always tell the user**:
+1. **Automated (preferred)**: `.github/workflows/refresh-cn-laws.yml` runs every Monday 03:00 UTC on GitHub-hosted runners, pulls fresh text from flk.npc.gov.cn, and opens a PR if anything changed. End users get the update by `git pull` (or by waiting for the next `.plugin` release).
+2. **Manual** (only if the user has direct .cn access): download the latest .docx from flk.npc.gov.cn, then run `python3 ~~/skills/cn-law-lookup/scripts/refresh_cn_corpus.py /path/to/docx/`.
 
-> ⚠️ 该法律全文来自 2023-09 快照。如果你需要的条文涉及 2023-09 之后的修正，请核验当前版本（或让用户重新下载 docx 并运行 refresh_cn_corpus.py）。
-
-For the 21 bundled core statutes, no freshness disclaimer is needed — they were rebuilt from the user's 2026-05 download.
-
-## Refresh workflow
-
-If a law in the core set gets amended (or the user wants to add a new core law):
-
-1. User downloads the latest .docx from flk.npc.gov.cn on any network that can reach .cn (home, mobile hotspot, etc.)
-2. User runs: `python3 ~~/skills/cn-law-lookup/scripts/refresh_cn_corpus.py /path/to/downloaded/docx/`
-3. The script auto-detects the law title, converts docx → Markdown, and overwrites the corresponding file in `references/cn_laws/`
-4. No plugin reinstall required — the next Claude session picks up the new text
-
-Use `--add` to add a law that is not in the default core mapping (creates a new file in `cn_laws/`).
+No freshness disclaimer is needed when quoting from the bundled 21 — they are refreshed weekly. For any law outside the 21, no statutory text is available; do not paraphrase from memory without disclosure.
 
 ## Hard limits
 
