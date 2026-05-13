@@ -8,10 +8,11 @@ Usage:
   python3 scraper.py --out-dir /path/to/cn_laws/
 
 What it does:
-  1. Queries the unofficial flk.npc.gov.cn API for the latest version of
-     each law in CORE_LAWS.
-  2. Downloads the WORD (.docx) file for each.
-  3. Converts to clean Markdown and writes to --out-dir.
+  1. Bootstraps a session by GET-ing the homepage to receive Set-Cookie.
+  2. Queries the unofficial flk.npc.gov.cn API for the latest version of
+     each law in CORE_LAWS, with browser-like headers and the session cookie.
+  3. Downloads the WORD (.docx) file for each.
+  4. Converts to clean Markdown and writes to --out-dir.
 
 The unofficial API was documented by github.com/twang2218/law-datasets.
 Endpoints used:
@@ -20,6 +21,7 @@ Endpoints used:
   GET https://wb.flk.npc.gov.cn/... (WORD file CDN)
 """
 import argparse
+import http.cookiejar
 import json
 import os
 import re
@@ -30,11 +32,31 @@ import urllib.request
 import zipfile
 import xml.etree.ElementTree as ET
 
+HOME = "https://flk.npc.gov.cn/"
 API = "https://flk.npc.gov.cn/api/"
 CDN = "https://wb.flk.npc.gov.cn"
 NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
 
-UA = "Mozilla/5.0 (legal-for-cn-jp scraper; +https://github.com/ChenxingM/legal-for-cn-jp)"
+# Browser-like headers. flk.npc.gov.cn returns empty 200 to "polite bot" UAs
+# without a Referer, so we present as Chrome and always send Referer/Accept-Language.
+UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+)
+BASE_HEADERS = {
+    "User-Agent": UA,
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+    "Referer": HOME,
+    "X-Requested-With": "XMLHttpRequest",
+    "Sec-Fetch-Dest": "empty",
+    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Site": "same-origin",
+}
+
+# Module-level cookie-aware opener so flsearch/detail calls share session state.
+COOKIE_JAR = http.cookiejar.CookieJar()
+OPENER = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(COOKIE_JAR))
 
 # Mapping: official title → bundled filename stem
 CORE_LAWS = {
@@ -59,27 +81,63 @@ CORE_LAWS = {
     "中华人民共和国外商投资法": "外商投资法",
     "中华人民共和国民事诉讼法": "民事诉讼法",
     "中华人民共和国仲裁法": "仲裁法",
-    # Add these for v0.2.1 once we confirm scraper works:
-    # "信息网络传播权保护条例": "信息网络传播权保护条例",
-    # "计算机软件保护条例": "计算机软件保护条例",
 }
 
 
-def http_get(url, timeout=30, retries=3):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json,*/*"})
+def http_get(url, timeout=30, retries=3, extra_headers=None):
+    """GET with browser-like headers and cookie session. Returns response bytes."""
+    headers = dict(BASE_HEADERS)
+    if extra_headers:
+        headers.update(extra_headers)
+    req = urllib.request.Request(url, headers=headers)
     last = None
     for i in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                return r.read()
+            with OPENER.open(req, timeout=timeout) as r:
+                body = r.read()
+                if not body.strip():
+                    # Diagnostic: empty body almost always = anti-bot block
+                    print(
+                        f"  ⚠ empty body. status={r.status} "
+                        f"content-type={r.headers.get('Content-Type')!r} "
+                        f"content-length={r.headers.get('Content-Length')!r}",
+                        flush=True,
+                    )
+                return body
         except Exception as e:
             last = e
             time.sleep(2 ** i)
     raise last
 
 
+def bootstrap_session():
+    """GET the homepage so the server sets session cookies on COOKIE_JAR."""
+    print(f"[bootstrap] GET {HOME}", flush=True)
+    headers = {
+        "User-Agent": UA,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+    }
+    req = urllib.request.Request(HOME, headers=headers)
+    with OPENER.open(req, timeout=30) as r:
+        _ = r.read()
+        cookies = [c.name for c in COOKIE_JAR]
+        print(f"[bootstrap] status={r.status} cookies={cookies}", flush=True)
+
+
+def _parse_json(body, ctx):
+    """Parse JSON or print diagnostic body preview and return None."""
+    try:
+        return json.loads(body)
+    except json.JSONDecodeError as e:
+        print(f"  ✗ JSON parse error in {ctx}: {e}", flush=True)
+        preview = body[:500] if isinstance(body, (bytes, bytearray)) else str(body)[:500]
+        print(f"    body preview ({len(body)} bytes): {preview!r}", flush=True)
+        return None
+
+
 def search_law(title):
-    """Search for a law by exact title. Returns the latest record id."""
+    """Search for a law by exact title. Returns the latest record dict."""
     params = {
         "type": "flsearch",
         "searchType": "title;vague",
@@ -90,15 +148,14 @@ def search_law(title):
         "_": str(int(time.time() * 1000)),
     }
     url = API + "?" + urllib.parse.urlencode(params)
-    data = json.loads(http_get(url))
-    if data.get("code") != 200:
+    body = http_get(url)
+    data = _parse_json(body, "search_law")
+    if data is None or data.get("code") != 200:
         return None
     laws = data.get("result", {}).get("data", [])
-    # Take the first that is 法律, status=1 (有效), exact title match
     for law in laws:
         if law.get("title") == title and law.get("status") == "1" and law.get("type") == "法律":
             return law
-    # Fallback: any with this exact title
     for law in laws:
         if law.get("title") == title:
             return law
@@ -109,15 +166,15 @@ def get_detail(law_id):
     """Fetch detail to get the download links."""
     params = {"type": "detail", "id": law_id, "_": str(int(time.time() * 1000))}
     url = API + "?" + urllib.parse.urlencode(params)
-    data = json.loads(http_get(url))
-    if data.get("code") != 200:
+    body = http_get(url)
+    data = _parse_json(body, "get_detail")
+    if data is None or data.get("code") != 200:
         return None
-    body = data.get("result", {}).get("body", [])
-    for item in body:
+    items = data.get("result", {}).get("body", [])
+    for item in items:
         if item.get("type") == "WORD":
             return CDN + item["path"]
-    # No WORD; try HTML
-    for item in body:
+    for item in items:
         if item.get("type") == "HTML":
             return CDN + item["url"]
     return None
@@ -164,6 +221,8 @@ def main():
     args = p.parse_args()
     os.makedirs(args.out_dir, exist_ok=True)
 
+    bootstrap_session()
+
     updated = 0
     failed = 0
     for title, stem in CORE_LAWS.items():
@@ -174,7 +233,7 @@ def main():
                 print(f"  ✗ not found", flush=True)
                 failed += 1
                 continue
-            print(f"  publish: {law['publish']}  status: {law.get('status')}")
+            print(f"  publish: {law.get('publish')}  status: {law.get('status')}", flush=True)
             url = get_detail(law["id"])
             if not url:
                 print(f"  ✗ no WORD link", flush=True)
@@ -185,7 +244,7 @@ def main():
             size = docx_to_md(docx_bytes, out_path)
             print(f"  ✓ {stem}.md ({size/1024:.1f} KB)", flush=True)
             updated += 1
-            time.sleep(1)  # be polite
+            time.sleep(1)
         except Exception as e:
             print(f"  ✗ error: {e}", flush=True)
             failed += 1
