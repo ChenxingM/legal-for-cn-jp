@@ -235,4 +235,4 @@ refresh_cn_corpus.py /path/to/file.docx --add
 
 - 日本：政府著作物，e-Gov 法令数据——公开。
 - 中国：依照著作权法第 5 条第 1 项，中国政府作品属公有领域。
-- 中国核心法语料来源 [LawRefBook/Laws](https://github.com/LawRefBook/Laws)（致谢；该项目当前未声明 license）。
+- 中国核心法语料：21 部里有 17 部由 [LawRefBook/Laws](https://github.com/LawRefBook/Laws) 同步（致谢；该项目当前未声明 license）；4 部 owner-maintained（民法典 / 反不正当竞争法 / 网络安全法 / 仲裁法）由维护者从 [flk.npc.gov.cn 国家法律法规数据库](https://flk.npc.gov.cn/) 官網下载的 .docx 通过 `refresh_cn_corpus.py` 处理（PRC 政府作品，公有领域）。
