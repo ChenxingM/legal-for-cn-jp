@@ -100,6 +100,30 @@ Structure the memo as:
 - [Whether outside counsel review is recommended — be honest]
 ```
 
+## Output policy
+
+### Citations
+
+Every legal or license conclusion MUST anchor to a specific provision and link to an authoritative source. Never paraphrase a rule without a citation.
+
+- **Japanese statutes**: cite `法令名 第X条第Y項第Z号` and link e-Gov as `https://laws.e-gov.go.jp/law/<法令ID>`. The 法令ID for bundled laws is in `~~/references/law-index.csv`; if unknown, link the e-Gov search home `https://laws.e-gov.go.jp/` instead.
+- **下請法系 (not in e-Gov)**: link 公正取引委員会 `https://www.jftc.go.jp/shitauke/legislation/`.
+- **PRC statutes**: cite `法律名 第X条第Y款第Z项` and link the 国家法律法规数据库 `https://flk.npc.gov.cn/` (note: 2026 SPA migration — specific URLs are not stable, link the landing page). For LawRefBook-synced files also link the GitHub mirror `https://github.com/LawRefBook/Laws/blob/master/<dir>/<file>(<date>).md`.
+- **OSS licenses**: cite the SPDX identifier and link the SPDX page `https://spdx.org/licenses/<SPDX-ID>.html`, plus the upstream project's `LICENSE` file URL when relevant.
+- **Cases / 判例 / 裁判文书**: out of scope until v0.4.0 — disclose if asked.
+
+Never invent article numbers or URLs. If you can't cite the controlling provision, say so and offer to look it up via `jp-law-lookup` or `cn-law-lookup`.
+
+### Output language
+
+Match the user's input language:
+- 日本語 input → 日本語 output
+- 中文 input → 中文 output
+- English input → English output
+- Mixed input → primary language of the question (the language the user uses to ask, not the language of the statute being asked about)
+
+条文名・固有名詞・専門用語・法律名 / 法律条文 / 法律术语 stay in their original language. Translate only commentary and analysis.
+
 ## Hard limits
 
 - This is a contract review, not legal advice. State this in every memo.
