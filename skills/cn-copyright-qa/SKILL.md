@@ -5,6 +5,21 @@ description: Answer questions about Chinese (PRC) copyright law for the animatio
 
 # Chinese (PRC) copyright Q&A
 
+> **MANDATORY STEPS — DO NOT SKIP, EVEN FOR "SIMPLE" QUESTIONS.**
+>
+> 1. **READ via Read tool** (do not paraphrase from training data — 著作权法 was rewritten in 2020):
+>    - `~~/references/cn_laws/著作权法.md` (always)
+>    - `~~/references/cn_laws/民法典.md` (for 合同/侵权 references)
+>    - `~~/references/cn_laws/网络安全法.md`, `商标法.md`, `反不正当竞争法.md` (when adjacent)
+>
+> 2. **QUOTE the controlling article verbatim** before paraphrasing. "第17条" alone is not citation — paste the actual text.
+>
+> 3. **CITE every conclusion** with `法律名 第X条第Y款第Z项` + link to 国家法律法规数据库 `https://flk.npc.gov.cn/` (note: 2026 SPA migration — specific deep URLs unstable, link the landing page). For LawRefBook-synced files (17 of 21) also include the GitHub mirror `https://github.com/LawRefBook/Laws/blob/master/<dir>/<file>(<date>).md`. Never invent article numbers or URLs.
+>
+> 4. **MATCH user's input language**: 日本語 input → 日本語 output, 中文 input → 中文 output, English input → English output. 条文名・法律名・法律术语 stay in their native language; translate only commentary.
+>
+> Skipping any step = invalid response.
+
 Answer 著作权法 questions grounded in the actual 2020-revised statute. Be especially careful about three things where PRC differs sharply from Japan:
 
 1. **Work types**: PRC renamed 电影作品 to 视听作品 (audiovisual works) in the 2020 amendment. Use the new term.
@@ -63,30 +78,6 @@ For adjacent questions:
 - **No 行政法规**. 《信息网络传播权保护条例》(国务院, 2013) and 《计算机软件保护条例》are not bundled — but they are at flk.npc.gov.cn for manual fetch.
 - **No case law**. PRC has 指导性案例 (guiding cases) from 最高法 and important 互联网法院 decisions. Roadmap v0.4.0.
 - **No AI specialty**. 《生成式人工智能服务管理暂行办法》(2023) is 部门规章, not bundled. Critical for content generation work — v0.5.0.
-
-## Output policy
-
-### Citations
-
-Every legal or license conclusion MUST anchor to a specific provision and link to an authoritative source. Never paraphrase a rule without a citation.
-
-- **Japanese statutes**: cite `法令名 第X条第Y項第Z号` and link e-Gov as `https://laws.e-gov.go.jp/law/<法令ID>`. The 法令ID for bundled laws is in `~~/references/law-index.csv`; if unknown, link the e-Gov search home `https://laws.e-gov.go.jp/` instead.
-- **下請法系 (not in e-Gov)**: link 公正取引委員会 `https://www.jftc.go.jp/shitauke/legislation/`.
-- **PRC statutes**: cite `法律名 第X条第Y款第Z项` and link the 国家法律法规数据库 `https://flk.npc.gov.cn/` (note: 2026 SPA migration — specific URLs are not stable, link the landing page). For LawRefBook-synced files also link the GitHub mirror `https://github.com/LawRefBook/Laws/blob/master/<dir>/<file>(<date>).md`.
-- **OSS licenses**: cite the SPDX identifier and link the SPDX page `https://spdx.org/licenses/<SPDX-ID>.html`, plus the upstream project's `LICENSE` file URL when relevant.
-- **Cases / 判例 / 裁判文书**: out of scope until v0.4.0 — disclose if asked.
-
-Never invent article numbers or URLs. If you can't cite the controlling provision, say so and offer to look it up via `jp-law-lookup` or `cn-law-lookup`.
-
-### Output language
-
-Match the user's input language:
-- 日本語 input → 日本語 output
-- 中文 input → 中文 output
-- English input → English output
-- Mixed input → primary language of the question (the language the user uses to ask, not the language of the statute being asked about)
-
-条文名・固有名詞・専門用語・法律名 / 法律条文 / 法律术语 stay in their original language. Translate only commentary and analysis.
 
 ## Hard limits
 

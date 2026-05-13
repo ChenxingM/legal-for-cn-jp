@@ -5,6 +5,13 @@ description: Look up Japanese statutory law — find the text of a specific arti
 
 # Japanese statute lookup
 
+> **MANDATORY STEPS — DO NOT SKIP, EVEN FOR "SIMPLE" QUESTIONS.**
+>
+> 1. **READ via Read tool**: if the law is in the bundled table below, read `~~/references/laws/<file>.md` directly before answering. For unbundled laws, use the e-Gov API client (see below). **Do not paraphrase from training data — your knowledge of these statutes is stale.**
+> 2. **QUOTE the controlling article verbatim** before paraphrasing it. Citing only "第X条" without the article's actual text is insufficient proof that you read the source — the user can't verify your reasoning without seeing the text.
+> 3. **CITE every quoted or paraphrased rule** with `法令名 第X条第Y項第Z号` + the e-Gov URL from the table (format: `https://laws.e-gov.go.jp/law/<法令ID>`). For 下請法系 (not in e-Gov): link 公取委 URLs (see `jp-subcontract-review` skill). **Never invent article numbers or URLs** — if you don't have the ID in the table, fetch via the e-Gov API client below.
+> 4. **MATCH user's input language**: 日本語 input → 日本語 output, 中文 input → 中文 output, English input → English output. 条文名・固有名詞・専門用語・法律名 stay native; translate only commentary.
+
 Answer questions about Japanese statutory law by retrieving the actual text — not by reciting from training data, which is likely out of date.
 
 ## Decision tree
@@ -19,24 +26,26 @@ When the user asks for the text or substance of a Japanese law, follow this orde
 
 These 16 laws live in `references/laws/` as cleaned Markdown — full current text. **Read them with the Read tool before fetching anything remote.** Reading them takes one tool call and zero seconds of network latency.
 
-| File | Use for |
-|---|---|
-| `著作権法.md` | Copyright — ownership, 二次利用, 私的複製, 引用, 著作者人格権, 罰則 |
-| `著作権等管理事業法.md` | JASRAC and other management organizations |
-| `民法.md` | Contracts, torts, agency, succession — the base civil code |
-| `労働基準法.md` | Working hours, overtime, wages, leave |
-| `労働契約法.md` | Employment contract formation, termination, fixed-term rules |
-| `労働者派遣法.md` | Dispatched workers — distinguish from outsourcing |
-| `不正競争防止法.md` | Trade secret, slavish imitation, well-known mark abuse |
-| `個人情報保護法.md` | APPI — personal data handling |
-| `商標法.md` | Trademark registration and enforcement |
-| `意匠法.md` | Design rights |
-| `特許法.md` | Patents |
-| `映画盗撮防止法.md` | Theatrical recording ban |
-| `プロバイダ責任制限法.md` | Notice-and-takedown for online infringement |
-| `消費者契約法.md` | Consumer contract rules |
-| `独占禁止法.md` | Antitrust, 優越的地位の濫用 |
-| `景品表示法.md` | Advertising rules |
+| File | 法令ID (e-Gov) | Use for |
+|---|---|---|
+| `著作権法.md` | [345AC0000000048](https://laws.e-gov.go.jp/law/345AC0000000048) | Copyright — ownership, 二次利用, 私的複製, 引用, 著作者人格権, 罰則 |
+| `著作権等管理事業法.md` | [412AC0000000131](https://laws.e-gov.go.jp/law/412AC0000000131) | JASRAC and other management organizations |
+| `民法.md` | [129AC0000000089](https://laws.e-gov.go.jp/law/129AC0000000089) | Contracts, torts, agency, succession — the base civil code |
+| `労働基準法.md` | [322AC0000000049](https://laws.e-gov.go.jp/law/322AC0000000049) | Working hours, overtime, wages, leave |
+| `労働契約法.md` | [419AC0000000128](https://laws.e-gov.go.jp/law/419AC0000000128) | Employment contract formation, termination, fixed-term rules |
+| `労働者派遣法.md` | [360AC0000000088](https://laws.e-gov.go.jp/law/360AC0000000088) | Dispatched workers — distinguish from outsourcing |
+| `不正競争防止法.md` | [405AC0000000047](https://laws.e-gov.go.jp/law/405AC0000000047) | Trade secret, slavish imitation, well-known mark abuse |
+| `個人情報保護法.md` | [415AC0000000057](https://laws.e-gov.go.jp/law/415AC0000000057) | APPI — personal data handling |
+| `商標法.md` | [334AC0000000127](https://laws.e-gov.go.jp/law/334AC0000000127) | Trademark registration and enforcement |
+| `意匠法.md` | [334AC0000000125](https://laws.e-gov.go.jp/law/334AC0000000125) | Design rights |
+| `特許法.md` | [334AC0000000121](https://laws.e-gov.go.jp/law/334AC0000000121) | Patents |
+| `映画盗撮防止法.md` | [419AC1000000065](https://laws.e-gov.go.jp/law/419AC1000000065) | Theatrical recording ban |
+| `プロバイダ責任制限法.md` | [413AC0000000137](https://laws.e-gov.go.jp/law/413AC0000000137) | Notice-and-takedown (現「情報流通プラットフォーム対処法」) |
+| `消費者契約法.md` | [412AC0000000061](https://laws.e-gov.go.jp/law/412AC0000000061) | Consumer contract rules |
+| `独占禁止法.md` | [322AC0000000054](https://laws.e-gov.go.jp/law/322AC0000000054) | Antitrust, 優越的地位の濫用 |
+| `景品表示法.md` | [337AC0000000134](https://laws.e-gov.go.jp/law/337AC0000000134) | Advertising rules |
+
+Plus 下請法 系 5 files (not in e-Gov) — see `jp-subcontract-review` for the 公取委 URLs.
 
 ## e-Gov API client
 
@@ -69,30 +78,6 @@ When citing law:
 - Always include the article number AND the law name in citations: 「著作権法第30条第1項」not just "Article 30".
 - If you fetched from the API, mention the asof date so the user knows when the text was current.
 - If the answer involves recent amendments or unsettled interpretation, say so plainly — the bundled corpus is a point-in-time snapshot.
-
-## Output policy
-
-### Citations
-
-Every legal or license conclusion MUST anchor to a specific provision and link to an authoritative source. Never paraphrase a rule without a citation.
-
-- **Japanese statutes**: cite `法令名 第X条第Y項第Z号` and link e-Gov as `https://laws.e-gov.go.jp/law/<法令ID>`. The 法令ID for bundled laws is in `~~/references/law-index.csv`; if unknown, link the e-Gov search home `https://laws.e-gov.go.jp/` instead.
-- **下請法系 (not in e-Gov)**: link 公正取引委員会 `https://www.jftc.go.jp/shitauke/legislation/`.
-- **PRC statutes**: cite `法律名 第X条第Y款第Z项` and link the 国家法律法规数据库 `https://flk.npc.gov.cn/` (note: 2026 SPA migration — specific URLs are not stable, link the landing page). For LawRefBook-synced files also link the GitHub mirror `https://github.com/LawRefBook/Laws/blob/master/<dir>/<file>(<date>).md`.
-- **OSS licenses**: cite the SPDX identifier and link the SPDX page `https://spdx.org/licenses/<SPDX-ID>.html`, plus the upstream project's `LICENSE` file URL when relevant.
-- **Cases / 判例 / 裁判文书**: out of scope until v0.4.0 — disclose if asked.
-
-Never invent article numbers or URLs. If you can't cite the controlling provision, say so and offer to look it up via `jp-law-lookup` or `cn-law-lookup`.
-
-### Output language
-
-Match the user's input language:
-- 日本語 input → 日本語 output
-- 中文 input → 中文 output
-- English input → English output
-- Mixed input → primary language of the question (the language the user uses to ask, not the language of the statute being asked about)
-
-条文名・固有名詞・専門用語・法律名 / 法律条文 / 法律术语 stay in their original language. Translate only commentary and analysis.
 
 ## Hard limits
 

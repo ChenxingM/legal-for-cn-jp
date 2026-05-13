@@ -5,6 +5,18 @@ description: Open-source license compliance review for in-house tools — Adobe 
 
 # OSS license compliance review (animation pipeline tooling)
 
+> **MANDATORY STEPS — DO NOT SKIP.**
+>
+> 1. **DECLARE distribution mode at the top of every review**: internal / partner share / public / SaaS. License obligations differ by mode. Ask the user if unclear.
+>
+> 2. **VERIFY EVERY LICENSE CLAIM**: each license cited must be backed by an SPDX URL (e.g., https://spdx.org/licenses/MIT.html, https://spdx.org/licenses/Apache-2.0.html, https://spdx.org/licenses/GPL-2.0-only.html) AND the upstream project's `LICENSE` file URL. Never invent licenses or URLs.
+>
+> 3. **CITE every license claim** with the SPDX identifier + SPDX URL + upstream `LICENSE` URL. For copyleft contagion claims, cite the specific clause (e.g., GPL-2.0 §2, AGPL-3.0 §13). Never assert "X is GPL-contagious" without pointing to the actual clause.
+>
+> 4. **MATCH user's input language**: 日本語 input → 日本語 output, 中文 input → 中文 output, English input → English output. License names (MIT, Apache-2.0, GPL-3.0) and SPDX identifiers stay native; translate only commentary.
+>
+> Skipping any step = invalid review.
+
 Review software dependencies for license compatibility and obligations. The audience is a technical artist or pipeline TD building internal tools, not a lawyer — the output should be actionable.
 
 ## Industry context
@@ -99,30 +111,6 @@ When the user provides a dependency list or repo:
 - **Re-licensing claims**: a maintainer cannot relicense code contributed by others without their permission. Flag any "we changed our license to X" announcement on a project with multiple contributors.
 - **Patent retaliation clauses**: Apache-2.0 and similar terminate the patent grant if you sue. Relevant if your studio has a patent portfolio.
 - **CLA vs DCO**: contributing back is fine — but check whether the project requires a CLA assigning copyright (Apache projects do; many GitHub projects use a DCO instead).
-
-## Output policy
-
-### Citations
-
-Every legal or license conclusion MUST anchor to a specific provision and link to an authoritative source. Never paraphrase a rule without a citation.
-
-- **Japanese statutes**: cite `法令名 第X条第Y項第Z号` and link e-Gov as `https://laws.e-gov.go.jp/law/<法令ID>`. The 法令ID for bundled laws is in `~~/references/law-index.csv`; if unknown, link the e-Gov search home `https://laws.e-gov.go.jp/` instead.
-- **下請法系 (not in e-Gov)**: link 公正取引委員会 `https://www.jftc.go.jp/shitauke/legislation/`.
-- **PRC statutes**: cite `法律名 第X条第Y款第Z项` and link the 国家法律法规数据库 `https://flk.npc.gov.cn/` (note: 2026 SPA migration — specific URLs are not stable, link the landing page). For LawRefBook-synced files also link the GitHub mirror `https://github.com/LawRefBook/Laws/blob/master/<dir>/<file>(<date>).md`.
-- **OSS licenses**: cite the SPDX identifier and link the SPDX page `https://spdx.org/licenses/<SPDX-ID>.html`, plus the upstream project's `LICENSE` file URL when relevant.
-- **Cases / 判例 / 裁判文书**: out of scope until v0.4.0 — disclose if asked.
-
-Never invent article numbers or URLs. If you can't cite the controlling provision, say so and offer to look it up via `jp-law-lookup` or `cn-law-lookup`.
-
-### Output language
-
-Match the user's input language:
-- 日本語 input → 日本語 output
-- 中文 input → 中文 output
-- English input → English output
-- Mixed input → primary language of the question (the language the user uses to ask, not the language of the statute being asked about)
-
-条文名・固有名詞・専門用語・法律名 / 法律条文 / 法律术语 stay in their original language. Translate only commentary and analysis.
 
 ## Hard limits
 

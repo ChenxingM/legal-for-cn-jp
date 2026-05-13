@@ -5,6 +5,23 @@ description: Answer questions about Japanese copyright law for the animation / v
 
 # Japanese copyright Q&A (animation industry focus)
 
+> **MANDATORY STEPS — DO NOT SKIP, EVEN FOR "SIMPLE" QUESTIONS.**
+>
+> 1. **READ via Read tool** (do not paraphrase from training data — 著作権法 was amended in 2018, 2020, 2024, your knowledge is stale):
+>    - `~~/references/laws/著作権法.md` → e-Gov [345AC0000000048](https://laws.e-gov.go.jp/law/345AC0000000048)
+>    - `~~/references/laws/労働契約法.md` → [419AC0000000128](https://laws.e-gov.go.jp/law/419AC0000000128) (for 職務著作)
+>    - `~~/references/laws/著作権等管理事業法.md` → [412AC0000000131](https://laws.e-gov.go.jp/law/412AC0000000131) (for JASRAC)
+>    - `~~/references/laws/プロバイダ責任制限法.md` → [413AC0000000137](https://laws.e-gov.go.jp/law/413AC0000000137) (for online takedown)
+>    - `~~/references/laws/不正競争防止法.md` → [405AC0000000047](https://laws.e-gov.go.jp/law/405AC0000000047) (for adjacent IP)
+>
+> 2. **QUOTE the controlling article verbatim** from the file before paraphrasing. "第30条" alone is not citation — paste the actual text.
+>
+> 3. **CITE every conclusion** with `法令名 第X条第Y項第Z号` + the e-Gov URL above. Never invent article numbers or URLs. If the law isn't in the list, delegate to `jp-law-lookup`.
+>
+> 4. **MATCH user's input language**: 日本語 input → 日本語 output, 中文 input → 中文 output, English input → English output. 条文名・固有名詞・法律名 stay native; translate only commentary.
+>
+> Skipping any step = invalid response.
+
 Answer 著作権法 questions grounded in the actual statute. Quote articles when the answer turns on text. Be honest about what is settled law, what is judicial interpretation, and what is debated.
 
 ## Always read the statute first
@@ -57,30 +74,6 @@ Some questions sit outside the statute:
 - **What does 文化庁 think?** Read administrative guidance — these are not bundled. Tell the user.
 - **What did the court say?** Japanese case law is not in this plugin. Tell the user that 判例検索 is a planned v0.2.0 capability and that for now they should search 裁判所Web or ask outside counsel.
 - **Other countries' law applies?** Copyright is national. Cross-border questions need analysis in each jurisdiction — say so.
-
-## Output policy
-
-### Citations
-
-Every legal or license conclusion MUST anchor to a specific provision and link to an authoritative source. Never paraphrase a rule without a citation.
-
-- **Japanese statutes**: cite `法令名 第X条第Y項第Z号` and link e-Gov as `https://laws.e-gov.go.jp/law/<法令ID>`. The 法令ID for bundled laws is in `~~/references/law-index.csv`; if unknown, link the e-Gov search home `https://laws.e-gov.go.jp/` instead.
-- **下請法系 (not in e-Gov)**: link 公正取引委員会 `https://www.jftc.go.jp/shitauke/legislation/`.
-- **PRC statutes**: cite `法律名 第X条第Y款第Z项` and link the 国家法律法规数据库 `https://flk.npc.gov.cn/` (note: 2026 SPA migration — specific URLs are not stable, link the landing page). For LawRefBook-synced files also link the GitHub mirror `https://github.com/LawRefBook/Laws/blob/master/<dir>/<file>(<date>).md`.
-- **OSS licenses**: cite the SPDX identifier and link the SPDX page `https://spdx.org/licenses/<SPDX-ID>.html`, plus the upstream project's `LICENSE` file URL when relevant.
-- **Cases / 判例 / 裁判文书**: out of scope until v0.4.0 — disclose if asked.
-
-Never invent article numbers or URLs. If you can't cite the controlling provision, say so and offer to look it up via `jp-law-lookup` or `cn-law-lookup`.
-
-### Output language
-
-Match the user's input language:
-- 日本語 input → 日本語 output
-- 中文 input → 中文 output
-- English input → English output
-- Mixed input → primary language of the question (the language the user uses to ask, not the language of the statute being asked about)
-
-条文名・固有名詞・専門用語・法律名 / 法律条文 / 法律术语 stay in their original language. Translate only commentary and analysis.
 
 ## Hard limits
 

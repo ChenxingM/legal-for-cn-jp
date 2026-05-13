@@ -5,6 +5,23 @@ description: Audit a 下請取引 (B2B subcontracting relationship) under Japan'
 
 # 下請取引コンプライアンス監査 (下請代金支払遅延等防止法)
 
+> **MANDATORY STEPS — DO NOT SKIP.**
+>
+> 1. **READ all five via Read tool** before any audit (do not paraphrase — 規則 was amended through 令和5年):
+>    - `~~/references/laws/下請代金支払遅延等防止法.md` → 公取委 https://www.jftc.go.jp/shitauke/legislation/act.html
+>    - `~~/references/laws/下請法施行令.md` → 公取委 https://www.jftc.go.jp/shitauke/legislation/co.html
+>    - `~~/references/laws/下請法書面規則.md` → 公取委 https://www.jftc.go.jp/shitauke/legislation/article3.html
+>    - `~~/references/laws/下請法遅延利息規則.md` → 公取委 https://www.jftc.go.jp/shitauke/legislation/article4_2.html
+>    - `~~/references/laws/下請法書類保存規則.md` → 公取委 https://www.jftc.go.jp/shitauke/legislation/article5.html
+>
+> 2. **QUOTE the controlling article verbatim** before paraphrasing. "第3条" alone is not citation — paste the actual text.
+>
+> 3. **CITE every legal conclusion** with `法 第X条第Y項第Z号` or `規則 第X条` + the 公取委 URL above. 下請法 is **not in e-Gov**. For adjacent JP statutes use e-Gov `https://laws.e-gov.go.jp/law/<法令ID>` (see `jp-law-lookup` for the bundled 法令ID table). Never invent article numbers or URLs.
+>
+> 4. **MATCH user's input language**: 日本語 input → 日本語 output, 中文 input → 中文 output, English input → English output. 条文名・法律名 stay native; translate only commentary.
+>
+> Skipping any step = invalid audit.
+
 下請法 is a thin but unforgiving statute. The 12 articles look small, but the 公正取引委員会規則 attached to them dictate 8 mandatory written-contract items, 11 prohibited parental acts, a 60-day payment ceiling, a 14.6%/year late-interest rate, and 2-year records retention. Animation studios are routinely on the 親事業者 side and trip on the written-document and payment-period rules.
 
 ## Always read these first
@@ -213,30 +230,6 @@ The 公取委 publishes 勧告 details. Searchable list: https://www.jftc.go.jp/
 - `jp-labor-contract-review` — when the engagement is closer to 偽装請負 (working-reality test) than to clean B2B subcontracting
 - `jp-copyright-qa` — when the audit raises 著作権 issues (assignment, 翻案権, 二次的著作物利用権)
 - `jp-law-lookup` — for related statutes not bundled (建設業法、政府契約の支払遅延防止法)
-
-## Output policy
-
-### Citations
-
-Every legal or license conclusion MUST anchor to a specific provision and link to an authoritative source. Never paraphrase a rule without a citation.
-
-- **Japanese statutes**: cite `法令名 第X条第Y項第Z号` and link e-Gov as `https://laws.e-gov.go.jp/law/<法令ID>`. The 法令ID for bundled laws is in `~~/references/law-index.csv`; if unknown, link the e-Gov search home `https://laws.e-gov.go.jp/` instead.
-- **下請法系 (not in e-Gov)**: link 公正取引委員会 `https://www.jftc.go.jp/shitauke/legislation/`.
-- **PRC statutes**: cite `法律名 第X条第Y款第Z项` and link the 国家法律法规数据库 `https://flk.npc.gov.cn/` (note: 2026 SPA migration — specific URLs are not stable, link the landing page). For LawRefBook-synced files also link the GitHub mirror `https://github.com/LawRefBook/Laws/blob/master/<dir>/<file>(<date>).md`.
-- **OSS licenses**: cite the SPDX identifier and link the SPDX page `https://spdx.org/licenses/<SPDX-ID>.html`, plus the upstream project's `LICENSE` file URL when relevant.
-- **Cases / 判例 / 裁判文书**: out of scope until v0.4.0 — disclose if asked.
-
-Never invent article numbers or URLs. If you can't cite the controlling provision, say so and offer to look it up via `jp-law-lookup` or `cn-law-lookup`.
-
-### Output language
-
-Match the user's input language:
-- 日本語 input → 日本語 output
-- 中文 input → 中文 output
-- English input → English output
-- Mixed input → primary language of the question (the language the user uses to ask, not the language of the statute being asked about)
-
-条文名・固有名詞・専門用語・法律名 / 法律条文 / 法律术语 stay in their original language. Translate only commentary and analysis.
 
 ## Hard limits
 

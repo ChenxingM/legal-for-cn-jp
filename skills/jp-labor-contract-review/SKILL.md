@@ -5,6 +5,24 @@ description: Review Japanese labor and outsourcing contracts. Decide whether an 
 
 # Japanese labor / outsourcing contract review
 
+> **MANDATORY STEPS — DO NOT SKIP.**
+>
+> 1. **READ via Read tool** before drafting any review (do not paraphrase from training data):
+>    - `~~/references/laws/労働基準法.md` → e-Gov [322AC0000000049](https://laws.e-gov.go.jp/law/322AC0000000049)
+>    - `~~/references/laws/労働契約法.md` → [419AC0000000128](https://laws.e-gov.go.jp/law/419AC0000000128)
+>    - `~~/references/laws/労働者派遣法.md` → [360AC0000000088](https://laws.e-gov.go.jp/law/360AC0000000088)
+>    - `~~/references/laws/民法.md` → [129AC0000000089](https://laws.e-gov.go.jp/law/129AC0000000089) (請負/委任 sections)
+>
+> 2. **ASK FOR THE CONTRACT** if the user has not attached one. An audit without the contract is conjecture.
+>
+> 3. **QUOTE the controlling article verbatim** from the file before paraphrasing. "第16条" alone is not citation — paste the actual text.
+>
+> 4. **CITE every legal conclusion** with `法令名 第X条第Y項第Z号` + the e-Gov URL above. For 下請法-adjacent flags: link 公取委 `https://www.jftc.go.jp/shitauke/legislation/` and offer to switch to `jp-subcontract-review`. Never invent article numbers or URLs.
+>
+> 5. **MATCH user's input language**: 日本語 input → 日本語 output, 中文 input → 中文 output, English input → English output. 条文名・法律名 stay native; translate only commentary.
+>
+> Skipping any step = invalid response.
+
 Review a contract against Japanese labor law and flag deviations from baseline. The output is a memo for the user — not advice for the counterparty.
 
 ## Always read these first
@@ -99,30 +117,6 @@ Structure the memo as:
 - [What to do before signing]
 - [Whether outside counsel review is recommended — be honest]
 ```
-
-## Output policy
-
-### Citations
-
-Every legal or license conclusion MUST anchor to a specific provision and link to an authoritative source. Never paraphrase a rule without a citation.
-
-- **Japanese statutes**: cite `法令名 第X条第Y項第Z号` and link e-Gov as `https://laws.e-gov.go.jp/law/<法令ID>`. The 法令ID for bundled laws is in `~~/references/law-index.csv`; if unknown, link the e-Gov search home `https://laws.e-gov.go.jp/` instead.
-- **下請法系 (not in e-Gov)**: link 公正取引委員会 `https://www.jftc.go.jp/shitauke/legislation/`.
-- **PRC statutes**: cite `法律名 第X条第Y款第Z项` and link the 国家法律法规数据库 `https://flk.npc.gov.cn/` (note: 2026 SPA migration — specific URLs are not stable, link the landing page). For LawRefBook-synced files also link the GitHub mirror `https://github.com/LawRefBook/Laws/blob/master/<dir>/<file>(<date>).md`.
-- **OSS licenses**: cite the SPDX identifier and link the SPDX page `https://spdx.org/licenses/<SPDX-ID>.html`, plus the upstream project's `LICENSE` file URL when relevant.
-- **Cases / 判例 / 裁判文书**: out of scope until v0.4.0 — disclose if asked.
-
-Never invent article numbers or URLs. If you can't cite the controlling provision, say so and offer to look it up via `jp-law-lookup` or `cn-law-lookup`.
-
-### Output language
-
-Match the user's input language:
-- 日本語 input → 日本語 output
-- 中文 input → 中文 output
-- English input → English output
-- Mixed input → primary language of the question (the language the user uses to ask, not the language of the statute being asked about)
-
-条文名・固有名詞・専門用語・法律名 / 法律条文 / 法律术语 stay in their original language. Translate only commentary and analysis.
 
 ## Hard limits
 
