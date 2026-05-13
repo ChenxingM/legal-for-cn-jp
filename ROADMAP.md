@@ -19,9 +19,10 @@ The vision is a Japan-China bilingual legal assistant for the animation industry
 - Total plugin size ~6 MB
 
 Deferred from original v0.2.0 plan:
-- `cn-labor-contract-review` skill — folded into the JP version's logic; can be split out in v0.2.1 if user demand justifies it
-- 下請代金支払遅延等防止法 (Japan's Subcontract Act) — still not in e-Gov bulk feed; v0.2.1
+- `cn-labor-contract-review` skill — folded into the JP version's logic; can be split out later if user demand justifies it
 - Long-tail PRC law lookup beyond the bundled 21 — the v0.2.0 build originally shipped a HuggingFace index for this, which has been removed. Direct scraping of flk.npc.gov.cn (the originally planned replacement) was abandoned after their 2026 SPA migration broke the unofficial JSON API. Current plan: extend `LRB_SOURCED_LAWS` in `scraper.py` to cover more 法律部门 / 行政法规 / 司法解释 from LawRefBook in v0.3.0.
+
+(下請法 was also deferred from v0.2.0 — shipped in v0.2.1 below.)
 
 ## v0.2.1 — shipped (incremental refinements)
 
@@ -90,7 +91,7 @@ AI law is moving faster than any other area and is not well covered by general s
 
 Polish, internal testing at one studio, documentation pass, governance:
 
-- Update cadence: monthly statute refresh from e-Gov / flk.npc
+- Update cadence: weekly CN sync from LawRefBook (already in place); monthly JP statute refresh from e-Gov
 - Case law additions: quarterly
 - Versioned releases with changelog
 - Internal review process for new skill contributions

@@ -218,5 +218,5 @@ The 公取委 publishes 勧告 details. Searchable list: https://www.jftc.go.jp/
 
 - This is a compliance audit, not legal advice. State this in every memo.
 - Recommend 弁護士／公取委対応経験のある法律事務所 review for: ongoing 公取委 調査, 勧告対応, criminal investigation under 法 第10条, or recharacterization disputes worth more than nominal amounts.
-- 下請法 was **substantively amended in 2024 (令和6年法律第X号)** in some implementing-rule areas; the current corpus reflects amendments through 平成21年法律第51号 (act) and 令和5年公正取引委員会規則第3号 (書面規則). For the most recent amendments not bundled, point users to the [公取委 page](https://www.jftc.go.jp/shitauke/legislation/) and recommend external counsel for live disputes.
+- The bundled corpus reflects act amendments through 平成21年法律第51号 (2009) and 書面規則 改正 through 令和5年公正取引委員会規則第3号 (2023). Any later amendments are not reflected. Before relying on this for a live dispute, check the [公取委 legislation page](https://www.jftc.go.jp/shitauke/legislation/) for newer amendments, and recommend external counsel.
 - If the user has not provided the actual 書面 (the alleged 第3条 document, the PO, the email chain, the contract), ask for it before running this skill. An audit without the document is conjecture.
