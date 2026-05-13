@@ -12,6 +12,21 @@ description: Look up Japanese statutory law — find the text of a specific arti
 > 3. **CITE every quoted or paraphrased rule** with `法令名 第X条第Y項第Z号` + the e-Gov URL from the table (format: `https://laws.e-gov.go.jp/law/<法令ID>`). For 下請法系 (not in e-Gov): link 公取委 URLs (see `jp-subcontract-review` skill). **Never invent article numbers or URLs** — if you don't have the ID in the table, fetch via the e-Gov API client below.
 > 4. **MATCH user's input language**: 日本語 input → 日本語 output, 中文 input → 中文 output, English input → English output. 条文名・固有名詞・専門用語・法律名 stay native; translate only commentary.
 
+**ANTI-PATTERNS — DO NOT REPRODUCE:**
+
+❌ Article numbers without quoted text or URL — looks like you read but didn't.
+❌ Referencing user's employer/role/affiliation from email or memory.
+❌ Inventing 法令ID for laws not in the bundled table — fetch via the e-Gov API client below, do not guess.
+❌ Trailing apologies about uncertainty — if uncertain, run the API client and check.
+
+**REQUIRED PATTERN:**
+
+```
+**民法 第632条（請負）** [e-Gov 129AC0000000089: https://laws.e-gov.go.jp/law/129AC0000000089]
+
+> [exact text from `~~/references/laws/民法.md`]
+```
+
 Answer questions about Japanese statutory law by retrieving the actual text — not by reciting from training data, which is likely out of date.
 
 ## Decision tree

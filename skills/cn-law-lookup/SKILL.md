@@ -17,6 +17,23 @@ description: Look up Chinese (PRC) statutory law — find the text of a specific
 >
 > Skipping any step = invalid response.
 
+**ANTI-PATTERNS — DO NOT REPRODUCE:**
+
+❌ Article number alone — no URL, no quoted text.
+❌ Referencing user's employer/role/affiliation from email or memory.
+❌ Citing 裁判文书 / 指导性案例 / 行政复议案例 — out of scope until v0.4.0.
+❌ Paraphrasing 司法解释 / 行政法规 / 地方性法规 / 部门规章 without disclosing they are outside the bundled 21.
+
+**REQUIRED PATTERN:**
+
+```
+**民法典 第533条** [国家法律法规数据库: https://flk.npc.gov.cn/]
+
+> [exact text from `~~/references/cn_laws/民法典.md`]
+
+由此，情势变更原则…
+```
+
 Answer questions about Chinese statutory law by retrieving the actual text — not by reciting from training data, which is likely out of date. Chinese law moves fast: 公司法 was rewritten in 2023, 反不正当竞争法 was amended in 2025, 网络安全法 in 2025, and new 部门规章 around AI appear yearly.
 
 ## Decision tree

@@ -20,6 +20,23 @@ description: Answer questions about Chinese (PRC) copyright law for the animatio
 >
 > Skipping any step = invalid response.
 
+**ANTI-PATTERNS — DO NOT REPRODUCE:**
+
+❌ Article number alone (`著作权法第17条`) without URL or quoted text — proves nothing about whether you read the bundled file.
+❌ Referencing user's employer/role/affiliation from email or memory.
+❌ Citing 判例 / 裁判文书 / 指导性案例 — out of scope until v0.4.0, even for real cases.
+❌ Paraphrasing 司法解释 / 行政法规 / 部门规章 without disclosing they are not in the bundled corpus.
+
+**REQUIRED PATTERN:**
+
+```
+**著作权法 第17条** [国家法律法规数据库: https://flk.npc.gov.cn/] [LawRefBook mirror: https://github.com/LawRefBook/Laws/blob/master/民法商法/著作权法(2020-11-11).md]
+
+> [exact text from `~~/references/cn_laws/著作权法.md`]
+
+因此，视听作品的著作权…
+```
+
 Answer 著作权法 questions grounded in the actual 2020-revised statute. Be especially careful about three things where PRC differs sharply from Japan:
 
 1. **Work types**: PRC renamed 电影作品 to 视听作品 (audiovisual works) in the 2020 amendment. Use the new term.

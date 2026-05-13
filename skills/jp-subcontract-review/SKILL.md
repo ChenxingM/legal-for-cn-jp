@@ -22,6 +22,23 @@ description: Audit a 下請取引 (B2B subcontracting relationship) under Japan'
 >
 > Skipping any step = invalid audit.
 
+**ANTI-PATTERNS — DO NOT REPRODUCE:**
+
+❌ `下請法 第3条` alone — no URL, no quoted text. **Fix:** paste the article from `下請代金支払遅延等防止法.md`.
+❌ Referencing user's employer/role/affiliation from email or memory.
+❌ Citing 公取委 勧告 examples without verifying — case-style references to enforcement actions are out of scope unless the user provides the case.
+❌ Trailing apologies / "未確認" hedges — fix the citation by Reading the file.
+
+**REQUIRED PATTERN:**
+
+```
+**下請代金支払遅延等防止法 第2条の2（下請代金の支払期日）** [公取委: https://www.jftc.go.jp/shitauke/legislation/act.html]
+
+> [exact text from `~~/references/laws/下請代金支払遅延等防止法.md`]
+
+このため、貴社の支払サイクルは…
+```
+
 下請法 is a thin but unforgiving statute. The 12 articles look small, but the 公正取引委員会規則 attached to them dictate 8 mandatory written-contract items, 11 prohibited parental acts, a 60-day payment ceiling, a 14.6%/year late-interest rate, and 2-year records retention. Animation studios are routinely on the 親事業者 side and trip on the written-document and payment-period rules.
 
 ## Always read these first

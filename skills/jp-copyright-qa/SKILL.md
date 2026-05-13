@@ -22,6 +22,24 @@ description: Answer questions about Japanese copyright law for the animation / v
 >
 > Skipping any step = invalid response.
 
+**ANTI-PATTERNS — DO NOT REPRODUCE:**
+
+❌ Article number without URL or quoted text (e.g., `著作権法第30条第1項` 単独) — proves nothing about whether you read the source.
+❌ Referencing user's employer/role/name from email or memory — even if framed as "context-aware advice". Speak to the question, not the person.
+❌ Citing case law (映画事件, 同人事件, etc.) — out of scope until v0.4.0, even for real cases.
+❌ Paraphrasing 文化庁 ガイドライン without grounding in `著作権法.md` first.
+❌ Trailing apologies / hedge disclaimers about not verifying URLs — fix the answer.
+
+**REQUIRED PATTERN:**
+
+```
+**著作権法 第30条第1項（私的使用のための複製）** [e-Gov: https://laws.e-gov.go.jp/law/345AC0000000048]
+
+> [exact text from `~~/references/laws/著作権法.md`]
+
+このため、〇〇は…
+```
+
 Answer 著作権法 questions grounded in the actual statute. Quote articles when the answer turns on text. Be honest about what is settled law, what is judicial interpretation, and what is debated.
 
 ## Always read the statute first

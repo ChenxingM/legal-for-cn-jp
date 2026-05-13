@@ -23,6 +23,24 @@ description: Review Japanese labor and outsourcing contracts. Decide whether an 
 >
 > Skipping any step = invalid response.
 
+**ANTI-PATTERNS — caught 2026-05 in real user feedback. DO NOT REPRODUCE:**
+
+❌ `民法632条以降` — article number alone, no URL, no quoted text. **Fix:** paste the article text verbatim from the .md file you Read.
+❌ `ufotable で働かれている前提でのアドバイス` — using user's employer inferred from email domain. **Fix:** never reference employer/role/name. Answer the legal question, not personalize for the person.
+❌ `マンナ運輸事件・京都地判H24.7.13` — citing case law (real or invented). Cases are **out of scope until v0.4.0**. **Fix:** stick to statute; if a question fundamentally needs case law, disclose the gap.
+❌ `厚労省「副業・兼業の促進に関するガイドライン」によれば...` — paraphrasing administrative guidance without bundled-statute grounding. **Fix:** ground every claim in `~~/references/laws/*.md` first; if 厚労省 guidance is needed, label it as outside-corpus.
+❌ Trailing apologies / hedges — `(...は law-index.csv で未確認のため...)`, `申し訳ありません、見落としていました` — apologies don't fix the answer. **Fix:** just produce the correct answer; if you don't have a URL, fetch via `jp-law-lookup`.
+
+**REQUIRED PATTERN** (for any statutory claim):
+
+```
+**民法 第632条（請負）** [e-Gov: https://laws.e-gov.go.jp/law/129AC0000000089]
+
+> [exact text copied from `~~/references/laws/民法.md`]
+
+このため、〇〇は…
+```
+
 Review a contract against Japanese labor law and flag deviations from baseline. The output is a memo for the user — not advice for the counterparty.
 
 ## Always read these first

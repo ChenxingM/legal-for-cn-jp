@@ -17,6 +17,21 @@ description: Open-source license compliance review for in-house tools — Adobe 
 >
 > Skipping any step = invalid review.
 
+**ANTI-PATTERNS — DO NOT REPRODUCE:**
+
+❌ License name alone (`MIT`, `GPL-3.0`) without SPDX URL and upstream LICENSE URL.
+❌ Referencing user's employer/role/affiliation from email or memory.
+❌ Asserting "X is GPL-contagious" without pointing to the specific clause (e.g., GPL-2.0 §2).
+❌ Mixing license names across versions (`GPL-2.0` vs `GPL-3.0` are not interchangeable; same for `LGPL-2.1` vs `LGPL-3.0`).
+
+**REQUIRED PATTERN (per dependency):**
+
+```
+**lodash@4.17.21** — MIT ([SPDX](https://spdx.org/licenses/MIT.html), [upstream LICENSE](https://github.com/lodash/lodash/blob/main/LICENSE))
+- Family: permissive
+- Obligation: keep copyright notice in distribution
+```
+
 Review software dependencies for license compatibility and obligations. The audience is a technical artist or pipeline TD building internal tools, not a lawyer — the output should be actionable.
 
 ## Industry context
