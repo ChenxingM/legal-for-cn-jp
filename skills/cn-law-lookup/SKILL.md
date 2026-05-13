@@ -1,9 +1,13 @@
 ---
 name: cn-law-lookup
-description: Look up Chinese (PRC) statutory law — find the text of a specific article, check what 民法典/著作权法/劳动合同法/个人信息保护法 actually says, identify which law applies to a topic. Use when the user asks "中国法律对XX怎么规定", "民法典第X条", "PRC copyright law on Y", "what does 个人信息保护法 say about Z", "中国劳动法对动画外注的规定", or any question requiring the actual text of a PRC 法律.
+description: Look up Chinese (PRC) statutory law — find the text of a specific article, check what 民法典/著作权法/劳动合同法/个人信息保护法 actually says, identify which law applies to a topic. **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 提问 → 中文 回答, 日本語 question → 日本語 answer, English → English; 法律名 and quoted articles stay in original Chinese, but ALL commentary/headings follow the user's language. (2) Bundled 21 core statutes in `~~/references/cn_laws/` MUST be Read via Read tool before quoting. (3) QUOTE the controlling article verbatim. (4) NEVER reference the user's name/employer/role. (5) Out of scope: 案例/裁判文书 (v0.4.0), 司法解释/行政法规/地方性法规/监察法规/部门规章 (not bundled).** Use when the user asks "中国法律对XX怎么规定", "民法典第X条", "PRC copyright law on Y", "what does 个人信息保护法 say about Z", "中国劳动法对动画外注的规定", or any question requiring the actual text of a PRC 法律.
 ---
 
 # Chinese (PRC) statute lookup
+
+> **LANGUAGE FIRST — match the user's input language, not the statute's language.**
+> 中文 提问 → 中文 回答. 日本語 question → 日本語 answer. English question → English answer.
+> Statute names (法律名) and quoted article text stay in their original language. ALL commentary, headings, conclusion, and analysis follow the user's input language. A Japanese question about PRC statutes gets a Japanese answer with Chinese article text quoted verbatim.
 
 > **MANDATORY STEPS — DO NOT SKIP, EVEN FOR "SIMPLE" QUESTIONS.**
 >

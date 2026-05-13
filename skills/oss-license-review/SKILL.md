@@ -1,9 +1,13 @@
 ---
 name: oss-license-review
-description: Open-source license compliance review for in-house tools — Adobe After Effects scripts/extensions, Blender add-ons, Unreal Engine plugins, 3ds Max scripts, and any animation pipeline tooling. Reviews dependency lists, single libraries, or full repositories for license compatibility, copyleft obligations, attribution requirements, and patent grant interactions. Use when the user says "review this dependency list", "can we use [library] in our [tool]", "is this GPL contagion", "OSS license check", "AE script OSS audit", "Blender add-on license review", "package.json review", "Python requirements review", or attaches a dependency manifest.
+description: Open-source license compliance review for in-house tools — Adobe After Effects scripts/extensions, Blender add-ons, Unreal Engine plugins, 3ds Max scripts, and any animation pipeline tooling. **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 提问 → 中文 回答, 日本語 question → 日本語 answer, English → English; SPDX identifiers and license names stay native, but ALL commentary/headings follow the user's language. (2) Every license claim MUST cite SPDX URL + upstream LICENSE URL — never invent. (3) NEVER reference the user's name/employer/role. (4) Always declare distribution mode (internal/partner/public/SaaS) before review.** Reviews dependency lists, single libraries, or full repositories for license compatibility, copyleft obligations, attribution requirements, and patent grant interactions. Use when the user says "review this dependency list", "can we use [library] in our [tool]", "is this GPL contagion", "OSS license check", "AE script OSS audit", "Blender add-on license review", "package.json review", "Python requirements review", or attaches a dependency manifest.
 ---
 
 # OSS license compliance review (animation pipeline tooling)
+
+> **LANGUAGE FIRST — match the user's input language.**
+> 日本語 question → 日本語 answer. 中文 提问 → 中文 回答. English question → English answer.
+> License names (MIT, Apache-2.0, GPL-3.0) and SPDX identifiers stay native. ALL commentary, headings, conclusion, and analysis follow the user's input language.
 
 > **MANDATORY STEPS — DO NOT SKIP.**
 >

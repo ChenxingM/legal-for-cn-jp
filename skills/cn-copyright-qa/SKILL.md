@@ -1,9 +1,13 @@
 ---
 name: cn-copyright-qa
-description: Answer questions about Chinese (PRC) copyright law for the animation / visual content industry. Covers 著作权法 ownership rules, 职务作品 vs 委托作品 vs 法人作品 (the three "who owns" categories — different from Japan's 職務著作), 视听作品 (the renamed 电影作品 post-2020), 信息网络传播权, 合理使用 (narrower than US fair use), 邻接权 (录像制作者, 表演者, 广播组织), and AI 生成内容 独创性问题. Use when the user asks "中国著作权法对XX怎么规定", "中国版职务作品规则", "PRC fair use", "中国二创合法吗", "动画在中国的著作权归属", or any 著作权法 question.
+description: Answer questions about Chinese (PRC) copyright law for the animation / visual content industry. **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 提问 → 中文 回答, 日本語 question → 日本語 answer, English → English; 法律名 and quoted articles stay in original Chinese, but ALL commentary/headings/conclusion follow the user's language. (2) ALWAYS Read `~~/references/cn_laws/著作权法.md` (and `民法典.md` etc. when adjacent) via Read tool before answering. (3) QUOTE the controlling article verbatim. (4) NEVER reference the user's name/employer/role. (5) 案例/裁判文书/指导性案例 are out of scope until v0.4.0 — do not cite them. (6) 司法解释/行政法规/部门规章 are not bundled — disclose if needed.** Covers 著作权法 ownership rules, 职务作品 vs 委托作品 vs 法人作品 (the three "who owns" categories — different from Japan's 職務著作), 视听作品 (the renamed 电影作品 post-2020), 信息网络传播权, 合理使用 (narrower than US fair use), 邻接权 (录像制作者, 表演者, 广播组织), and AI 生成内容 独创性问题. Use when the user asks "中国著作权法对XX怎么规定", "中国版职务作品规则", "PRC fair use", "中国二创合法吗", "动画在中国的著作权归属", or any 著作权法 question.
 ---
 
 # Chinese (PRC) copyright Q&A
+
+> **LANGUAGE FIRST — match the user's input language, not the statute's language.**
+> 中文 提问 → 中文 回答. 日本語 question → 日本語 answer. English question → English answer.
+> Statute names (法律名) and quoted article text stay in their original language. ALL commentary, headings, conclusion, and analysis follow the user's input language. A Japanese question about PRC 著作权法 gets a Japanese answer with Chinese article text quoted verbatim.
 
 > **MANDATORY STEPS — DO NOT SKIP, EVEN FOR "SIMPLE" QUESTIONS.**
 >

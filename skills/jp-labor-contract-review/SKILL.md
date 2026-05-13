@@ -1,9 +1,13 @@
 ---
 name: jp-labor-contract-review
-description: Review Japanese labor and outsourcing contracts. Decide whether an engagement is 雇用 (employment), 業務委託 (service commission), or 派遣 (dispatch). Flag 偽装請負 risk, illegal overtime clauses, 試用期間 problems, missing 36協定 references, and termination clauses that violate 労働契約法 第16条. Use when the user says "review this 業務委託契約", "check this 雇用契約", "is this an employment or contractor relationship", "原画外注契約 review", "freelancer agreement", "is this 偽装請負", or attaches a Japanese labor / outsourcing contract.
+description: Review Japanese labor and outsourcing contracts. **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 question → 中文 answer, 日本語 question → 日本語 answer, English → English; statute names and quoted articles stay in original Japanese, but ALL commentary/headings/conclusion follow the user's language. (2) ALWAYS Read `~~/references/laws/労働基準法.md`, `労働契約法.md`, `労働者派遣法.md`, `民法.md` via Read tool before answering. (3) QUOTE the controlling article verbatim; article numbers alone are insufficient. (4) NEVER reference the user's name/employer/role from email or memory. (5) Cases (判例) are out of scope until v0.4.0 — do not cite them.** Decide whether an engagement is 雇用 (employment), 業務委託 (service commission), or 派遣 (dispatch). Flag 偽装請負 risk, illegal overtime clauses, 試用期間 problems, missing 36協定 references, and termination clauses that violate 労働契約法 第16条. Use when the user says "review this 業務委託契約", "check this 雇用契約", "is this an employment or contractor relationship", "原画外注契約 review", "freelancer agreement", "is this 偽装請負", or attaches a Japanese labor / outsourcing contract.
 ---
 
 # Japanese labor / outsourcing contract review
+
+> **LANGUAGE FIRST — match the user's input language, not the statute's language.**
+> 日本語 question → 日本語 answer. 中文 提问 → 中文 回答. English question → English answer.
+> Statute names (法令名) and quoted article text stay in their original language. ALL commentary, headings, conclusion, and analysis follow the user's input language. A Chinese question about Japanese law gets a Chinese answer with Japanese article text quoted verbatim.
 
 > **MANDATORY STEPS — DO NOT SKIP.**
 >
@@ -30,6 +34,7 @@ description: Review Japanese labor and outsourcing contracts. Decide whether an 
 ❌ `マンナ運輸事件・京都地判H24.7.13` — citing case law (real or invented). Cases are **out of scope until v0.4.0**. **Fix:** stick to statute; if a question fundamentally needs case law, disclose the gap.
 ❌ `厚労省「副業・兼業の促進に関するガイドライン」によれば...` — paraphrasing administrative guidance without bundled-statute grounding. **Fix:** ground every claim in `~~/references/laws/*.md` first; if 厚労省 guidance is needed, label it as outside-corpus.
 ❌ Trailing apologies / hedges — `(...は law-index.csv で未確認のため...)`, `申し訳ありません、見落としていました` — apologies don't fix the answer. **Fix:** just produce the correct answer; if you don't have a URL, fetch via `jp-law-lookup`.
+❌ **Language mismatch** — user asked in Chinese (`日本就业竞争这边是如何规定的 我能同时接数个公司的业务委托吗`), response opened in Japanese (`日本における兼業・複数業務委託契約について`). Wrong. **Fix:** 中文 question → 中文 answer. Headings, conclusion, analysis ALL in Chinese. Only the quoted 民法/労働基準法 article text stays in Japanese (verbatim).
 
 **REQUIRED PATTERN** (for any statutory claim):
 

@@ -1,9 +1,13 @@
 ---
 name: jp-subcontract-review
-description: Audit a 下請取引 (B2B subcontracting relationship) under Japan's 下請代金支払遅延等防止法 (通称 下請法). Use when the user mentions 下請法, 親事業者, 下請事業者, 60日ルール, 下請代金, アニメ制作の元請-下請関係, 制作協力スタジオへの発注, 個人原画/動画/演出への外注, 書面交付義務, 公取委勧告, 違反通報, or asks "does 下請法 apply to my transaction" / "what's the parent-subcontractor capital threshold" / "are these mandatory written-contract items in our PO". This is distinct from jp-labor-contract-review (which covers 雇用/業務委託/派遣 worker classification) — 下請法 regulates B2B relationships triggered by capital-size thresholds, not worker-status.
+description: Audit a 下請取引 (B2B subcontracting relationship) under Japan's 下請代金支払遅延等防止法 (通称 下請法). **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 question → 中文 answer, 日本語 question → 日本語 answer, English → English; 法令名 and quoted articles stay in original Japanese, but ALL commentary/headings follow the user's language. (2) ALWAYS Read all 5 bundled files (`~~/references/laws/下請代金支払遅延等防止法.md`, `下請法施行令.md`, `下請法書面規則.md`, `下請法遅延利息規則.md`, `下請法書類保存規則.md`) before any audit. (3) QUOTE the controlling article verbatim. (4) NEVER reference the user's name/employer/role. (5) 下請法 is NOT in e-Gov — cite 公取委 URLs only.** Use when the user mentions 下請法, 親事業者, 下請事業者, 60日ルール, 下請代金, アニメ制作の元請-下請関係, 制作協力スタジオへの発注, 個人原画/動画/演出への外注, 書面交付義務, 公取委勧告, 違反通報, or asks "does 下請法 apply to my transaction" / "what's the parent-subcontractor capital threshold" / "are these mandatory written-contract items in our PO". Distinct from jp-labor-contract-review (which covers 雇用/業務委託/派遣 worker classification) — 下請法 regulates B2B relationships triggered by capital-size thresholds, not worker-status.
 ---
 
 # 下請取引コンプライアンス監査 (下請代金支払遅延等防止法)
+
+> **LANGUAGE FIRST — match the user's input language, not the statute's language.**
+> 日本語 question → 日本語 answer. 中文 提问 → 中文 回答. English question → English answer.
+> Statute names (法令名) and quoted article text stay in their original language. ALL commentary, headings, conclusion, and analysis follow the user's input language. A Chinese question about 下請法 gets a Chinese answer with Japanese article text quoted verbatim.
 
 > **MANDATORY STEPS — DO NOT SKIP.**
 >

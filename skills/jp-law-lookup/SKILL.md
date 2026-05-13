@@ -1,9 +1,13 @@
 ---
 name: jp-law-lookup
-description: Look up Japanese statutory law — find the text of a specific article, search by keyword across all current laws, list a law's revision history. Use when the user asks "what does Article X of [law] say", "find the rule on [topic] in Japanese law", "show me 著作権法第30条", "search laws for [term]", "is there a Japanese law that covers [topic]", or any question that requires the actual statutory text rather than a general answer.
+description: Look up Japanese statutory law — find the text of a specific article, search by keyword across all current laws, list a law's revision history. **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 question → 中文 answer, 日本語 question → 日本語 answer, English → English; statute names and quoted articles stay in original Japanese, but ALL commentary/headings/conclusion follow the user's language. (2) Bundled laws (16 in `~~/references/laws/` + 5 下請法系) MUST be Read via Read tool before quoting; for unbundled laws use the e-Gov API client. (3) QUOTE the controlling article verbatim. (4) NEVER reference the user's name/employer/role. (5) NEVER invent 法令ID — use the table in this skill or fetch via e-Gov API.** Use when the user asks "what does Article X of [law] say", "find the rule on [topic] in Japanese law", "show me 著作権法第30条", "search laws for [term]", "is there a Japanese law that covers [topic]", or any question that requires the actual statutory text rather than a general answer.
 ---
 
 # Japanese statute lookup
+
+> **LANGUAGE FIRST — match the user's input language, not the statute's language.**
+> 日本語 question → 日本語 answer. 中文 提问 → 中文 回答. English question → English answer.
+> Statute names (法令名) and quoted article text stay in their original language. ALL commentary, headings, conclusion, and analysis follow the user's input language. A Chinese question about a Japanese statute gets a Chinese answer with Japanese article text quoted verbatim.
 
 > **MANDATORY STEPS — DO NOT SKIP, EVEN FOR "SIMPLE" QUESTIONS.**
 >

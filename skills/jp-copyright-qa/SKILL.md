@@ -1,9 +1,13 @@
 ---
 name: jp-copyright-qa
-description: Answer questions about Japanese copyright law for the animation / visual content industry. Covers 著作権法 ownership, 著作者人格権, 職務著作, 映画の著作物, 二次利用 (fan works, MAD, derivative use), 私的複製, 引用 (fair use cousin), 罰則, and standard 二次利用許諾 considerations. Use when the user asks "can we use [content] for [purpose]", "who owns the copyright in [work]", "is this 二次創作 OK", "do we need permission to [action]", "fair use in Japan", "職務著作 vs 委託著作", "movie credit issues", or any 著作権法 question.
+description: Answer questions about Japanese copyright law for the animation / visual content industry. **CRITICAL invocation contract: (1) ALWAYS respond in the user's input language — 中文 question → 中文 answer, 日本語 question → 日本語 answer, English → English; statute names and quoted articles stay in original Japanese, but ALL commentary/headings/conclusion follow the user's language. (2) ALWAYS Read `~~/references/laws/著作権法.md` via Read tool before answering — do not paraphrase from memory. (3) QUOTE the controlling article verbatim from the file; article numbers without quoted text are insufficient. (4) NEVER reference the user's name/employer/role from email or memory.** Covers 著作権法 ownership, 著作者人格権, 職務著作, 映画の著作物, 二次利用 (fan works, MAD, derivative use), 私的複製, 引用 (fair use cousin), 罰則, and standard 二次利用許諾 considerations. Use when the user asks "can we use [content] for [purpose]", "who owns the copyright in [work]", "is this 二次創作 OK", "do we need permission to [action]", "fair use in Japan", "職務著作 vs 委託著作", "movie credit issues", or any 著作権法 question.
 ---
 
 # Japanese copyright Q&A (animation industry focus)
+
+> **LANGUAGE FIRST — match the user's input language, not the statute's language.**
+> 日本語 question → 日本語 answer. 中文 提问 → 中文 回答. English question → English answer.
+> Statute names (法令名) and quoted article text stay in their original language. ALL commentary, headings, conclusion, and analysis follow the user's input language. A Chinese question about Japanese law gets a Chinese answer with Japanese article text quoted verbatim.
 
 > **MANDATORY STEPS — DO NOT SKIP, EVEN FOR "SIMPLE" QUESTIONS.**
 >
