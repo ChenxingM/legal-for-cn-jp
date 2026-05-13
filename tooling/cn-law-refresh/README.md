@@ -1,23 +1,39 @@
 # CN law auto-refresh via GitHub Actions
 
-Keep the bundled PRC core statutes current — without needing access to `.cn` domains from your corporate network. GitHub-hosted runners are in the US/EU and can reach `flk.npc.gov.cn` directly.
+Keep the bundled PRC core statutes current — without needing access to `.cn` domains from your corporate network.
 
 ## How it works
 
 ```
-flk.npc.gov.cn  ─────►  GitHub Actions runner  ─────►  PR opened
-(reachable from         (runs scraper.py once a              │
- US/EU IPs)              week, converts docx→md)             ▼
-                                                       Reviewer merges
-                                                             │
-                                                             ▼
-                                                       New plugin version
-                                                       (or just git pull)
+LawRefBook/Laws  ─────►  GitHub Actions runner  ─────►  PR opened
+(GitHub corpus,         (runs scraper.py once a              │
+ maintained by           week, git clones + picks            ▼
+ community,              the latest-dated version       Reviewer merges
+ handles flk.npc          of each core law)                   │
+ dirty work for                                               ▼
+ us)                                                    `git pull`
 ```
+
+`scraper.py` does a `git clone --depth 1` of [LawRefBook/Laws](https://github.com/LawRefBook/Laws), then for each law in `LRB_SOURCED_LAWS` it picks the file matching `{stem}(YYYY-MM-DD).md` with the largest date and copies it into `references/cn_laws/{stem}.md`. Pure stdlib — no `requests`, no `playwright`.
+
+## Why not scrape flk.npc.gov.cn directly?
+
+`flk.npc.gov.cn` rebuilt as a SPA in 2026. The unofficial JSON API documented by [twang2218/law-datasets](https://github.com/twang2218/law-datasets) (the `?type=flsearch` / `?type=detail` endpoints) no longer exists — `/api/?type=flsearch` is now caught by the SPA's frontend router and returns the index.html shell. LawRefBook handles the new API for us; we just consume their curated output.
+
+## Owner-maintained laws (scraper does not touch these)
+
+| File | Why owner-maintained |
+|---|---|
+| `民法典.md` | Owner has authoritative .docx (1260 articles); use `refresh_cn_corpus.py` |
+| `反不正当竞争法.md` | 2025-06-27 第二次修订; LawRefBook stuck at 2019-04-23 |
+| `网络安全法.md` | 2025-10-28 修正; LawRefBook stuck at 2016-11-07 |
+| `仲裁法.md` | 2025-09-12 修订; LawRefBook stuck at 2017-09-01 |
+
+Move a name out of `OWNER_MAINTAINED_LAWS` in `scraper.py` once LawRefBook catches up (and you've verified their version matches the latest amendment).
 
 ## One-time setup
 
-1. Fork or copy this plugin to your GitHub repo (private is fine — GH Actions runs there too).
+1. Fork or copy this plugin to your GitHub repo (private is fine).
 
 2. Move the workflow file into the GitHub-required location:
 
@@ -37,66 +53,70 @@ flk.npc.gov.cn  ─────►  GitHub Actions runner  ─────►  P
 
 Default: **Monday 03:00 UTC** (Monday 12:00 JST).
 
-To change, edit the `cron` line in `.github/workflows/refresh-cn-laws.yml`. Cron is in UTC.
-
-## What the scraper does
-
-Reads `CORE_LAWS` dict in `scraper.py` (21 laws by default). For each:
-
-1. Query `flk.npc.gov.cn/api/?type=flsearch` with the exact title
-2. Find the latest record with status=1 (有效) and type=法律
-3. Get detail page to find the WORD download link
-4. Download docx from `wb.flk.npc.gov.cn`
-5. Convert to Markdown using the same logic as `refresh_cn_corpus.py`
-6. Write to `references/cn_laws/{stem}.md`
-
-If any law fails to fetch, the workflow exits with status 1 — but already-fetched laws are written. Failures usually mean a network blip or a title change; check the run log.
+Edit the `cron` line in `.github/workflows/refresh-cn-laws.yml` to change. Cron is in UTC.
 
 ## Output
 
 If anything changed, a **pull request** is opened with the diff. Reviewer should:
 
-1. Spot-check 2-3 changed files (especially short ones like 电子签名法 where a sole-clause change is detectable)
-2. Look at the publish_date in the new file's header — does it match a known recent amendment?
+1. Spot-check a few changed files — does the version header in the new file match a known recent amendment in LawRefBook's commits?
+2. If a law you care about appears in the diff and a 2025+ amendment exists upstream of LawRefBook (but they haven't picked it up), move that law into `OWNER_MAINTAINED_LAWS` and `refresh_cn_corpus.py` from the authoritative .docx instead.
 3. Merge if it looks right.
 
-Once merged, anyone using the plugin can `git pull` (if they cloned) or wait for the next `.plugin` release to get the updates.
+## Format note — LawRefBook vs owner-curated
 
-## Extending — add new laws
+LawRefBook outputs flat markdown:
 
-Edit `CORE_LAWS` in `scraper.py`:
+```
+# 中华人民共和国某法
 
-```python
-CORE_LAWS = {
-    # ... existing 21 ...
-    "中华人民共和国某新法": "某新法",
-    "信息网络传播权保护条例": "信息网络传播权保护条例",  # 行政法规, not 法律 — see note below
-}
+(amendment lines, blank-separated)
+
+<!-- INFO END -->
+
+第一条 ...内容...
+
+第二条 ...
 ```
 
-Then update `search_law()` in `scraper.py` if you want non-法律 types (行政法规, 司法解释). The current filter is `status == "1" and type == "法律"` — relax it for other tiers.
+`refresh_cn_corpus.py` (owner-curated for 民法典 etc.) outputs richer markdown:
+
+```
+# 中华人民共和国某法
+
+(amendment lines, parenthesized)
+目　　录
+
+## 第一章　总则
+### 第一节　...
+#### 第一条
+...内容...
+```
+
+Both work with `cn-law-lookup` (which hands the full file to Claude rather than navigating headings). The richer format is nicer to read but is regenerated every time `refresh_cn_corpus.py` runs.
+
+## Extending — adding a new core law
+
+Edit `LRB_SOURCED_LAWS` in `scraper.py`:
+
+```python
+LRB_SOURCED_LAWS = [
+    # ... existing ...
+    "新加的法名",  # bare title, no 中华人民共和国 prefix, no extension
+]
+```
+
+The scraper will search the standard top-level dirs in LawRefBook (民法商法, 经济法, 行政法, 社会法, 刑法, 诉讼与非诉讼程序法, 宪法, 宪法相关法, 司法解释, 行政法规, 部门规章, 其他). If LawRefBook doesn't have the law, the run fails with `not found in LawRefBook`. Either wait for upstream to add it, or add the law to `OWNER_MAINTAINED_LAWS` and refresh from .docx locally.
 
 ## Failure modes
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| HTTP 403 on flk.npc.gov.cn | Site changed bot detection | Update UA string in scraper.py, or wait for the unofficial API to stabilize |
-| Empty docx | Site CDN serving placeholder | Retry the workflow manually; some files are slow to land |
-| Wrong title returned | Exact-match search picked wrong revision | Adjust `search_law()` filter or add 法令番号 disambiguation |
-| GH Actions blocked from .cn | Rare but possible | Move to self-hosted runner outside corporate firewall |
+| `git clone failed` | GitHub rate limit / outage | Re-run; usually transient |
+| `not found in LawRefBook` for a law you expect | LawRefBook doesn't have it under the searched dirs, or filename pattern differs | Verify on github.com/LawRefBook/Laws; widen SEARCH_DIRS if needed |
+| LawRefBook's latest is older than a known amendment | LawRefBook lags upstream (their own scraper has the same flk problem we hit) | Move that law to OWNER_MAINTAINED_LAWS, use refresh_cn_corpus.py |
+| Workflow opens PR but content is identical (whitespace-only diff) | LawRefBook formatting drift | Merge anyway, or close PR |
 
-## Reading the unofficial API (for future maintainers)
+## Attribution
 
-The flk.npc.gov.cn frontend uses an undocumented JSON API. github.com/twang2218/law-datasets reverse-engineered it. Key endpoints:
-
-- `GET /api/?type=flsearch&searchType=title;vague&title=X&page=1&size=10&sortTr=f_bbrq_s;desc` — search
-- `GET /api/?type=detail&id=Y` — detail page with file links
-- Detail response includes `body[]` with `type=WORD`/`HTML`/`PDF` and a `path` (prepend `https://wb.flk.npc.gov.cn`)
-
-The API is unofficial — it may change without notice. If the workflow starts failing, check both:
-1. github.com/twang2218/law-datasets for crawler updates
-2. flk.npc.gov.cn's frontend Network tab for current API shape
-
-## License consideration
-
-Scraping flk.npc.gov.cn is legally fine — PRC statutes are public-domain government works per 著作权法 第5条第1项. But the site does not formally publish API contracts; respect their rate limits (the scraper sleeps 1 sec between requests).
+Statute corpus sourced from [LawRefBook/Laws](https://github.com/LawRefBook/Laws). PRC statutes are public-domain government works per 著作权法 第5条第1项; LawRefBook's curation (organization, naming, formatting) is their work — at the time of writing they have no declared license, so this consumption is on a best-effort attribution basis.

@@ -15,13 +15,13 @@ The vision is a Japan-China bilingual legal assistant for the animation industry
 - `cn-law-lookup` skill against the bundled 21 (no .cn dependency at runtime)
 - `cn-copyright-qa` skill with cross-references to Japan-side concepts
 - `refresh_cn_corpus.py` for local corpus updates without plugin reinstall
-- GitHub Actions workflow `.github/workflows/refresh-cn-laws.yml` — weekly auto-refresh of the 21 core statutes from flk.npc.gov.cn (GH-hosted runners are in US/EU, so even maintainers behind .cn-blocking corporate networks stay current)
+- GitHub Actions workflow `.github/workflows/refresh-cn-laws.yml` — weekly sync of 17 of the 21 core statutes from `github.com/LawRefBook/Laws` (a community-maintained GitHub corpus that handles flk.npc.gov.cn's 2026 SPA migration for us). The remaining 4 (民法典, 反不正当竞争法, 网络安全法, 仲裁法) are owner-maintained via `refresh_cn_corpus.py` from authoritative .docx because LawRefBook hasn't picked up their 2025 amendments yet.
 - Total plugin size ~6 MB
 
 Deferred from original v0.2.0 plan:
 - `cn-labor-contract-review` skill — folded into the JP version's logic; can be split out in v0.2.1 if user demand justifies it
 - 下請代金支払遅延等防止法 (Japan's Subcontract Act) — still not in e-Gov bulk feed; v0.2.1
-- Long-tail PRC law lookup beyond the bundled 21 — the v0.2.0 build originally shipped a HuggingFace index for this, which has been removed. Replacement design: GitHub Actions periodically caches a curated extended set from flk.npc.gov.cn into the repo. To be specified by the maintainer in a .cn-accessible environment; tracked for v0.2.1 or v0.3.0.
+- Long-tail PRC law lookup beyond the bundled 21 — the v0.2.0 build originally shipped a HuggingFace index for this, which has been removed. Direct scraping of flk.npc.gov.cn (the originally planned replacement) was abandoned after their 2026 SPA migration broke the unofficial JSON API. Current plan: extend `LRB_SOURCED_LAWS` in `scraper.py` to cover more 法律部门 / 行政法规 / 司法解释 from LawRefBook in v0.3.0.
 
 ## v0.2.1 — pending refinements
 

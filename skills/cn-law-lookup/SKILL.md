@@ -10,8 +10,8 @@ Answer questions about Chinese statutory law by retrieving the actual text — n
 ## Decision tree
 
 1. **Is the law one of the 21 bundled core statutes?** Check `~~/references/cn_laws/`. If yes, read it directly — fastest path, zero network, latest curated text.
-2. **Not in the bundled set?** This version cannot fetch the long tail at runtime. Tell the user the law is outside the bundled corpus, offer to reason from general principles only, and **always** flag the text-unavailable caveat. The roadmap is to cache a curated long-tail subset from flk.npc.gov.cn weekly via GitHub Actions (runners are US/EU and can reach .cn even when the user's corporate network cannot), but the design is not yet in place.
-3. **flk.npc.gov.cn is NOT reached from the user's machine at runtime.** Many corporate networks block .cn domains. The 21 core statutes are refreshed on GitHub-hosted runners and committed to the repo, so end users never need to hit .cn themselves.
+2. **Not in the bundled set?** This version cannot fetch the long tail at runtime. Tell the user the law is outside the bundled corpus, offer to reason from general principles only, and **always** flag the text-unavailable caveat. The roadmap is to extend the LawRefBook sync list in `tooling/cn-law-refresh/scraper.py` to cover more 法律部门 / 行政法规 / 司法解释.
+3. **No .cn domain is reached from the user's machine at runtime.** Many corporate networks block .cn domains. 17 of the 21 core statutes are synced weekly on GitHub-hosted runners from `github.com/LawRefBook/Laws` (the community-maintained corpus handles flk.npc.gov.cn's 2026 SPA migration for us). The remaining 4 are maintained by the project owner from authoritative .docx files. Either way, end users never need to hit .cn.
 
 ## Bundled core statutes
 
@@ -84,8 +84,8 @@ Single tier: the 21 bundled core statutes in `references/cn_laws/`, currently as
 
 Refresh paths:
 
-1. **Automated (preferred)**: `.github/workflows/refresh-cn-laws.yml` runs every Monday 03:00 UTC on GitHub-hosted runners, pulls fresh text from flk.npc.gov.cn, and opens a PR if anything changed. End users get the update by `git pull` (or by waiting for the next `.plugin` release).
-2. **Manual** (only if the user has direct .cn access): download the latest .docx from flk.npc.gov.cn, then run `python3 ~~/skills/cn-law-lookup/scripts/refresh_cn_corpus.py /path/to/docx/`.
+1. **Automated sync from LawRefBook (preferred for 17 of 21)**: `.github/workflows/refresh-cn-laws.yml` runs every Monday 03:00 UTC, `git clones` LawRefBook/Laws, and copies the latest-dated version of each law in `LRB_SOURCED_LAWS` (see `tooling/cn-law-refresh/scraper.py`) into `references/cn_laws/`. Opens a PR if anything changed.
+2. **Owner-maintained from authoritative .docx (for 4 of 21)**: 民法典, 反不正当竞争法, 网络安全法, 仲裁法 are not in the auto-sync list because LawRefBook lags their 2025 amendments. Refreshed by the project owner via `python3 ~~/skills/cn-law-lookup/scripts/refresh_cn_corpus.py /path/to/docx/`.
 
 No freshness disclaimer is needed when quoting from the bundled 21 — they are refreshed weekly. For any law outside the 21, no statutory text is available; do not paraphrase from memory without disclosure.
 
