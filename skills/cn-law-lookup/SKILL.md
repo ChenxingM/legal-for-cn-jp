@@ -73,8 +73,14 @@ These 21 laws live in `references/cn_laws/` as cleaned Markdown — top tier (�
 
 ## What this skill cannot do
 
-- **Long-tail laws (anything outside the 21 bundled core statutes) cannot be served at runtime in this version.** Future plan: a weekly GitHub Actions job will pull a curated extended set from flk.npc.gov.cn and commit it to the repo, so end users never need .cn access. Until that lands, only the 21 bundled core statutes are queryable; for anything else, reason from general principles and disclose the gap.
-- **No 部门规章 (部委级规章)**. Most 部门规章 (e.g., 网信办《生成式人工智能服务管理暂行办法》, 国家版权局规章) are not in the core 21. For these the user needs to fetch from the issuing 部委 website manually. v0.5.0 will bundle the most important ones for animation work.
+- **Only the "法律" tier is covered.** All 21 bundled statutes are enacted by 全国人大 or its 常委会 (the "法律" layer). The following layers are **not** in the corpus and cannot be served at runtime:
+    - **宪法** (the Constitution itself, plus 宪法修正案)
+    - **行政法规** — 国务院条例 (e.g., 信息网络传播权保护条例, 计算机软件保护条例, 电影管理条例)
+    - **地方性法规** — 省级人大-issued (e.g., 上海市某条例)
+    - **监察法规** — 国家监察委员会-issued (post-2018 supervision-system reform)
+    - **司法解释** — 最高法 / 最高检 (e.g., 关于审理著作权民事纠纷案件适用法律若干问题的解释)
+    - **部门规章** — 部委级办法 (e.g., 网信办《生成式人工智能服务管理暂行办法》, 国家版权局规章)
+  For these, reason from general principles only and **always** disclose the gap. Long-tail expansion is v0.3.0+ work (extend `LRB_SOURCED_LAWS` in `tooling/cn-law-refresh/scraper.py` or change upstream).
 - **No 判例 (cases)**. PRC case-law search is v0.4.0.
 - **No 港澳台 special-region laws** in the bundled set (these are governed by separate frameworks).
 
