@@ -20,15 +20,6 @@
 | `cn-copyright-qa` | 基于 2020 年修订版著作权法的问答。视听作品、职务作品、信息网络传播权都锚定到具体条款 |
 | `cn-law-lookup` | 中国法条查询——内置 21 部核心法律。长尾暂未覆盖（计划由 LawRefBook 同步覆盖更多法律部门） |
 
-## 网络架构（公司网络下重要）
-
-| 服务 | 用途 | .cn 被屏蔽时能访问吗？ |
-|---|---|---|
-| e-Gov 法令API v2 (laws.e-gov.go.jp) | 日本长尾查询 | ✅ .jp 域名，一般放行 |
-| github.com/LawRefBook/Laws | 中国核心法上游同步源 | ✅ GitHub，全球可达 |
-
-中国侧核心 21 部里有 17 部由 GitHub Actions 每周一从 [LawRefBook/Laws](https://github.com/LawRefBook/Laws) 同步——他们自己处理 flk.npc.gov.cn 的脏活（包括 2026 年 SPA 改版后的反向工程），我们 `git clone` 消费他们的输出。剩 4 部（民法典 + 反不正当竞争法 + 网络安全法 + 仲裁法）由维护者本地从权威 .docx 维护，scraper 不动它们——因为 LawRefBook 暂时没跟上这几部的 2025 修正版。详见 `tooling/cn-law-refresh/README.md`。
-
 ## 内置内容
 
 **日本侧**：17 部核心法律 + 下請法系 4 部規則／政令，清洗后的 Markdown（约 2.5 MB），存放在 `references/laws/`，外加 8,952 部精简索引（`references/law-index.csv`，2.4 MB）。下請法系 5 文件来自公正取引委員会官網（`下請代金支払遅延等防止法.md` / `下請法施行令.md` / `下請法書面規則.md` / `下請法遅延利息規則.md` / `下請法書類保存規則.md`）。
@@ -85,9 +76,7 @@ refresh_cn_corpus.py /path/to/file.docx --add
 
 ## 自动刷新（GitHub Actions）
 
-本仓库部署了 `.github/workflows/refresh-cn-laws.yml`。每周一 03:00 UTC（12:00 JST）从 LawRefBook/Laws 同步最新中国核心法，有变化时自动开 PR。
-
-之所以走 LawRefBook 而不是直连 flk.npc.gov.cn：flk 在 2026 年改成纯 SPA 架构、老的非官方 JSON API 不存在了；LawRefBook 是一个社区维护的 GitHub 法律语料库，处理上游变更交给他们，我们只 `git clone` 消费输出。详见 `tooling/cn-law-refresh/README.md`。
+本仓库部署了 `.github/workflows/refresh-cn-laws.yml`。每周一 03:00 UTC（12:00 JST）从 LawRefBook/Laws 同步最新中国核心法，有变化时自动开 PR。详见 `tooling/cn-law-refresh/README.md`。
 
 ## 时效性——使用前请阅读
 
